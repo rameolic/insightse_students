@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "997642698514",
+    "project_id": "ienotifications-17766",
+    "storage_bucket": "ienotifications-17766.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997642698514:android:571125993105a2c0be7dcb",
+        "android_client_info": {
+          "package_name": "com.insightsE.CSMSStudent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997642698514-ctthsgcikgmohspjj04s4hqdbg8145b0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5dcYeLIoahb2RGAIjTVeDKnXNkhIXXBI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997642698514-ctthsgcikgmohspjj04s4hqdbg8145b0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "997642698514-395g45ldnjso2tk7qdg6pek4ki15hpqb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rubrixanalytics.insightsestudent"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997642698514:android:4e28538c7f7418dabe7dcb",
+        "android_client_info": {
+          "package_name": "com.rubrixanalytics.insightse_students"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997642698514-ctthsgcikgmohspjj04s4hqdbg8145b0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5dcYeLIoahb2RGAIjTVeDKnXNkhIXXBI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997642698514-ctthsgcikgmohspjj04s4hqdbg8145b0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "997642698514-395g45ldnjso2tk7qdg6pek4ki15hpqb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rubrixanalytics.insightsestudent"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
