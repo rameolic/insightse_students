@@ -22,12 +22,21 @@ String profile;
 bool group;
 bool bot;
 bool respond;
+Future getTime() async {
+  final value = await getconversations();
+  return value;
+}
 class ContactsScreen extends StatefulWidget {
   @override
   _ContactsScreenState createState() => _ContactsScreenState();
 }
-
+Future futureIntFromPreferences;
 class _ContactsScreenState extends State<ContactsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    futureIntFromPreferences = getTime();
+  }
   TextEditingController searchcontroller = TextEditingController();
   final loading = new ValueNotifier(false);
   @override
@@ -53,9 +62,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
             centerTitle: true,
           ),
           body: SafeArea(
-
               child:
-
               !module.messenger ?
               Center(
                   child:
@@ -421,9 +428,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
                           );
                         }),
                     FutureBuilder(
-                        future: getconversations(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot platformData) {
+                        future:  futureIntFromPreferences,
+                        builder: (BuildContext context, AsyncSnapshot platformData) {
                           print("data : ${platformData.data}");
                           if (platformData.hasData) {
                             if (conversations.length > 0) {

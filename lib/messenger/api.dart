@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:flushbar/flushbar.dart';
 import 'messagesui.dart';
 
-String messengerid = Logindata.parentid == null ?Logindata.userid:Logindata.parentid;
+String messengerid = Logindata.parentid.toString() == "null" ?Logindata.userid:Logindata.parentid;
 String attachmentsettings;
 
 class converstionlist {
@@ -77,7 +77,6 @@ Future<bool> getconversations() async {
     "iduser": messengerid,
     "search": ""
   });
-
   print(jsonEncode(body));
   if(!currentlycalling){
     currentlycalling = true;
@@ -272,6 +271,7 @@ class message {
       messagecontent,
       sendername,
       readstatus;
+  bool isdeleted;
   List<String> attachment;
   message(
       {this.time,
@@ -281,7 +281,9 @@ class message {
       this.id,
       this.attachment,
       this.messagecontent,
-      this.sendername});
+      this.sendername,
+        this.isdeleted
+      });
 }
 List<message>chatconversations=[];
 List<message>tempmessages=[];
@@ -335,6 +337,7 @@ Future<bool> getmessages(receiverid,skip, context) async {
               attachment:
               decodeddata['data'][i]['attachment'].toString().split("<,>"),
               sendername: decodeddata['data'][i]['sender_name'].toString(),
+              isdeleted: decodeddata['data'][i]['is_delete'] == 1 ? true:false,
               readstatus: decodeddata['data'][i]['read_status'].toString()));
     }
 
@@ -376,6 +379,32 @@ Future<bool> checksystem() async {
       headers: headers);
   print("search : ${response.body}");
   if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+Future<bool> deletemessages(String messageid) async {
+  Map<String, String> headers = {
+    'Content-Type': 'application/json',
+    'Authorization':
+    'Bearer ${Logindata.usertoken}' + '_ie_' + '${Logindata.userid}'
+  };
+  final body = jsonEncode(<String, String>
+  {
+    "member_uid": messengerid,
+    "object_id":"$messageid"
+  }
+  );
+  print("delete body :$body");
+  http.Response response = await http.post(
+      Uri.parse(baseurl + "messenger/delete_message"),
+      headers: headers,
+      body: body);
+  print("delete : ${response.body}");
+  if (response.statusCode == 200) {
+    print(response.body);
     return true;
   } else {
     return false;

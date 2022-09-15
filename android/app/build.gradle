@@ -42,8 +42,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 30
         multiDexEnabled true
-        versionCode 22
-        versionName 'InsightsEv2.0.5'
+        versionCode 25
+        versionName 'InsightsEv2.0.8'
     }
     signingConfigs {
         release {

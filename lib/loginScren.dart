@@ -12,7 +12,7 @@ class LoginScreen extends StatelessWidget {
         fontFamily: 'OpenSans',
         primaryColor: styles.Style.buttonColor,
         // ignore: deprecated_member_use
-        cursorColor: styles.Style.buttonColor,
+        //cursorColor: styles.Style.buttonColor,
         snackBarTheme: SnackBarThemeData(
           backgroundColor: Colors.yellow[600],
           contentTextStyle: TextStyle(color: Colors.white),

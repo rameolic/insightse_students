@@ -19,7 +19,7 @@ Future<bool> notificationsapi(context) async {
     'Authorization':
     'Bearer ${Logindata.usertoken}' + '_ie_' + '${Logindata.userid}'
   };
-  final body = jsonEncode(<String, String>{"user_id":Logindata.userid});
+  final body = jsonEncode(<String, String>{"user_id":current_userid});
   print(jsonEncode(body));
   http.Response response = await http.post(
       Uri.parse(baseurl + "/push-notification/history"),
@@ -81,7 +81,7 @@ Future<bool> markreadstatus(context) async {
     'Authorization':
     'Bearer ${Logindata.usertoken}' + '_ie_' + '${Logindata.userid}'
   };
-  final body = jsonEncode(<String, String>{"user_id":Logindata.userid});
+  final body = jsonEncode(<String, String>{"user_id":current_userid});
   print(jsonEncode(body));
   http.Response response = await http.post(
       Uri.parse(baseurl + "push-notification/status/update"),

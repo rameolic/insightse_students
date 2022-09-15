@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
 
 import '../Contsants.dart';
+import 'package:flushbar/flushbar.dart';
 
 class Changepassword extends StatefulWidget {
   final String restid;
@@ -91,7 +92,7 @@ class _ForgotpasswordState extends State<Changepassword> {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => SignIn()));
         } else if (response.statusCode == 404) {
-          _showSnackBar("Password did not match!!!");
+          _showSnackBar("Password did not match!!!",context);
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -103,7 +104,7 @@ class _ForgotpasswordState extends State<Changepassword> {
           print(response.body);
         }
       } catch (e) {
-        _showSnackBar("Password did not match");
+        _showSnackBar("Password did not match",context);
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -127,7 +128,7 @@ class _ForgotpasswordState extends State<Changepassword> {
       padding: EdgeInsets.symmetric(horizontal: 15.0),
       margin: EdgeInsets.only(top: 15.0),
       // ignore: deprecated_member_use
-      child: RaisedButton(
+      child: ElevatedButton(
         onPressed: emailController.text == "" || passwordController.text == ""
             ? null
             : () {
@@ -137,11 +138,11 @@ class _ForgotpasswordState extends State<Changepassword> {
                 });
                 signIn(emailController.text, passwordController.text);
               },
-        elevation: 0.0,
-        color: Colors.blue,
-        child: Text("Change Password",
-            style: TextStyle(color: Colors.white70, fontSize: 18.0)),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+        child: Container(
+          color: Colors.blue,
+          child: Text("Change Password",
+              style: TextStyle(color: Colors.white70, fontSize: 18.0)),
+        ),
       ),
     );
   }
@@ -313,13 +314,20 @@ class _ForgotpasswordState extends State<Changepassword> {
       },
     );
   }
-// ignore: deprecated_member_use
-  void _showSnackBar(String title) => _scaffoldKey.currentState.showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red,
-          content: Text(title, textAlign: TextAlign.center),
-        ),
-      );
+
+  void _showSnackBar(String title,context){
+    Flushbar(
+      message: title,
+      icon: Icon(
+        Icons.info_outline,
+        size: 28.0,
+        color: secondarycolor,
+      ),
+      duration: Duration(seconds: 4),
+      leftBarIndicatorColor: secondarycolor,
+    )
+      ..show(context);
+  }
 
   ///put here
 }

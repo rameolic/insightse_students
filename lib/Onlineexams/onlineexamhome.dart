@@ -396,21 +396,13 @@ class OnlineClassCard extends StatelessWidget {
                 ],
               ),
               // ignore: deprecated_member_use
-              "$showrecordedvedio" == "1" ? RaisedButton.icon(
-                icon: Icon(
+              "$showrecordedvedio" == "1" ? ElevatedButton(
+                child: Icon(
                   Icons.play_circle_outline_sharp,
                   color: Colors.white,
                   size: 18,
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                ),
-                color: primarycolor,
                 onPressed: ontap,
-                label: Text(
-                  "Play Recorded Video",
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
               ) : SizedBox()
             ],
           ),

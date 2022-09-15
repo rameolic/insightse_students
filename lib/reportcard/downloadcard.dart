@@ -123,7 +123,7 @@
 // //             ],
 // //           )));
 // // }
-
+import '../Contsants.dart';
 import 'dart:isolate';
 import 'dart:ui';
 import 'dart:async';
@@ -135,6 +135,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'package:flushbar/flushbar.dart';
 const debug = true;
 
 
@@ -305,8 +306,17 @@ class _MyHomePageState extends State<MyHomePage> {
         onItemClick: (task) {
           _openDownloadedFile(task).then((success) {
             if (!success) {
-              Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text('Cannot open this file')));
+              Flushbar(
+                message: 'Cannot open this file',
+                icon: Icon(
+                  Icons.info_outline,
+                  size: 28.0,
+                  color: secondarycolor,
+                ),
+                duration: Duration(seconds: 4),
+                leftBarIndicatorColor: secondarycolor,
+              )
+                ..show(context);
             }
           });
         },
@@ -354,7 +364,7 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(
             height: 32.0,
           ),
-          FlatButton(
+          TextButton(
               onPressed: () {
                 _retryRequestPermission();
               },

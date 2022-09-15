@@ -4,6 +4,7 @@ import '../eventcalendar/calendarapi.dart';
 import '../Contsants.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:flushbar/flushbar.dart';
 import '../forgotpassword/ui.dart';
 import '../moduleapi.dart';
 import '../forgotpassword/api.dart';
@@ -304,7 +305,7 @@ class _SignInState extends State<SignIn> {
                                       onPressed: () async{
                                         if(forgotpassword.value == true){
                                           if (_email.isEmpty && _password.isEmpty) {
-                                            _showSnackBar('Please Enter Valid Information');
+                                            _showSnackBar('Please Enter Valid Information',context);
                                           }else {
                                             progress.value = 1;
                                             if (await forogotpasswordapi(_email,_password,context)) {
@@ -360,7 +361,7 @@ class _SignInState extends State<SignIn> {
 
   void onPressed1() async {
     if (_email.isEmpty && _password.isEmpty) {
-      _showSnackBar('Please Enter Valid Information');
+      _showSnackBar('Please Enter Valid Information',context);
       //_teddyController.play('fail');
     } else {
       if (_isEmailValid(_email, _password)) {
@@ -387,7 +388,7 @@ class _SignInState extends State<SignIn> {
       } else {
         _teddyController.play('fail');
         SmallHapticFeedback(false);
-        _showSnackBar('Please Enter Valid Details');
+        _showSnackBar('Please Enter Valid Details',context);
       }
     }
   }
@@ -488,21 +489,29 @@ class _SignInState extends State<SignIn> {
       final data = jsonDecode(response.body);
       String errormessage = data['msg'];
       _teddyController.play("fail");
-      _showSnackBar(errormessage);
+      _showSnackBar(errormessage,context);
       return false;
     } else {
       _teddyController.play("fail");
-      _showSnackBar("Please check the username");
+      _showSnackBar("Please check the username",context);
       return false;
     }
   }
 
-  void _showSnackBar(String title) => _scaffoldKey.currentState.showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red,
-          content: Text(title, textAlign: TextAlign.center),
-        ),
-      );
+
+  void _showSnackBar(String title,context){
+    Flushbar(
+      message: title,
+      icon: Icon(
+        Icons.info_outline,
+        size: 28.0,
+        color: secondarycolor,
+      ),
+      duration: Duration(seconds: 4),
+      leftBarIndicatorColor: secondarycolor,
+    )
+      ..show(context);
+  }
 }
 
 Future<bool> Logoutapi() async {

@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import '../Contsants.dart';
 
 import '../sign_in/wave.dart';
+import 'package:flushbar/flushbar.dart';
 class Forgotpassword extends StatefulWidget {
   @override
   _ForgotpasswordState createState() => _ForgotpasswordState();
@@ -100,7 +101,7 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                         )));
             showDialog();
           } catch (e) {
-            _showSnackBar("Network Erorr Occured !!!!!!!");
+            _showSnackBar("Network Erorr Occured !!!!!!!",context);
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => Forgotpassword()));
           }
@@ -110,14 +111,14 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                 MaterialPageRoute(builder: (context) => Forgotpassword()));
           }
         } catch (e) {
-          _showSnackBar("Network Erorr");
+          _showSnackBar("Network Erorr",context);
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => Forgotpassword()));
           // print(e);
         }
       }
     } catch (e) {
-      _showSnackBar("Network Erorr");
+      _showSnackBar("Network Erorr",context);
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Forgotpassword()));
       print(e);
@@ -131,7 +132,7 @@ class _ForgotpasswordState extends State<Forgotpassword> {
       padding: EdgeInsets.symmetric(horizontal: 15.0),
       margin: EdgeInsets.only(top: 15.0),
       // ignore: deprecated_member_use
-      child: RaisedButton(
+      child: ElevatedButton(
         onPressed: emailController.text == "" || passwordController.text == ""
             ? null
             : () {
@@ -140,11 +141,11 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                 });
                 signIn(emailController.text, passwordController.text);
               },
-        elevation: 0.0,
-        color: Colors.lightBlue,
-        child: Text("Send Otp",
-            style: TextStyle(color: Colors.white70, fontSize: 15.0)),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+        child: Container(
+          color: Colors.lightBlue,
+          child: Text("Send Otp",
+              style: TextStyle(color: Colors.white70, fontSize: 15.0)),
+        ),
       ),
     );
   }
@@ -261,11 +262,19 @@ class _ForgotpasswordState extends State<Forgotpassword> {
       },
     );
   }
-// ignore: deprecated_member_use
-  void _showSnackBar(String title) => _scaffoldKey.currentState.showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red,
-          content: Text(title, textAlign: TextAlign.center),
-        ),
-      );
+
+
+  void _showSnackBar(String title,context){
+    Flushbar(
+      message: title,
+      icon: Icon(
+        Icons.info_outline,
+        size: 28.0,
+        color: secondarycolor,
+      ),
+      duration: Duration(seconds: 4),
+      leftBarIndicatorColor: secondarycolor,
+    )
+      ..show(context);
+  }
 }
