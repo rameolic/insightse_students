@@ -4,6 +4,7 @@ import "package:http/http.dart"as http;
 import 'dart:convert';
 import 'online_classes/model.dart';
 import 'dart:io';
+import 'api/unreadtitlesapi.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:flutter/cupertino.dart';
@@ -177,6 +178,7 @@ void initial() async {
   Logindata.orgname = org_name;
   Logindata.branchname = logindata.getString('branch');
   await GetLmsData(forthedate);
+  await getunreadtitles();
 }
 
 class WebveiwUI extends StatefulWidget {

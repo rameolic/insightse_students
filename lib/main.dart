@@ -18,7 +18,7 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize();
    await Firebase.initializeApp(
-//     options: DefaultFirebaseOptions.currentPlatform,
+     options: DefaultFirebaseOptions.currentPlatform,
    );
    logindata = await SharedPreferences.getInstance();
   newuser = await (logindata.getBool('login') ?? true);

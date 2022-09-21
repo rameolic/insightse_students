@@ -16,6 +16,7 @@ class Circulardata {
   String memberuid;
   String filepath;
   String fileext;
+  bool readstatus;
   Circulardata(
       {this.id,
       this.circularno,
@@ -24,7 +25,8 @@ class Circulardata {
       this.filepath,
       this.memberuid,
       this.noticedate,
-      this.noticetitle});
+      this.noticetitle,
+      this.readstatus});
 }
 List<String>titlelist=[];
 List<Circulardata>circulars=[];
@@ -42,13 +44,12 @@ List<Circulardata>circulars=[];
   };
   print("token : "+'Bearer ${Logindata.usertoken}' + '_ie_' + '${Logindata.userid}');
   print("circulars input : $inputbody");
+  print(current_userid);
   http.Response response = await http.post(Uri.parse(
-      Logindata.parentid == "null"?baseurl + "notices/student/${Logindata.userid}/notice/list"
-          :
-      baseurl + "notices/student/${Logindata.parentid}/notice/list"),
+      baseurl + "notices/student/$current_userid/notice/list"),
       headers: headers,
       body: jsonEncode(inputbody));
-  print("url : ${baseurl + "notices/student/${Logindata.parentid}/notice/list"}");
+  print("url : ${baseurl + "notices/student/$current_userid/notice/list"}");
   print("response : ${response.body}");
   if (response.statusCode == 200) {
     var decodeddata = jsonDecode(response.body);
@@ -81,6 +82,7 @@ List<Circulardata>circulars=[];
               memberuid: data[i]['member_uid'],
               filepath: data[i]['file_path'],
               fileext: data[i]['file_ext'],
+              readstatus: data[i]['read_status'].toString() == "0"?false:true,
             )
         );
         titlelist.add(data[i]['notice_title']);

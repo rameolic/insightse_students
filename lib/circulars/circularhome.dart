@@ -13,6 +13,7 @@ import 'package:swipe_image_gallery/swipe_image_gallery.dart';
 import 'package:path/path.dart' as p;
 import 'package:url_launcher/url_launcher.dart';
 import '../newdashboardui.dart';
+import '../api/unreadtitlesapi.dart';
 
 class CircularHome extends StatefulWidget {
   @override
@@ -250,191 +251,202 @@ class _CircularHomeState extends State<CircularHome> {
                   itemBuilder: (BuildContext context, int index) {
                     DateTime date =
                     DateTime.parse("${circulars[index].noticedate}");
+                    ValueNotifier<bool>status=ValueNotifier(circulars[index].readstatus);
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        GestureDetector(
-                          onTap: (){
-                            String path = p.extension(circulars[index].filepath);
-                            if(path == ".jpg" ||
-                                path == ".jpeg" ||
-                                path == ".tif" ||
-                                path == ".gif" ||
-                                path == ".tiff" ||
-                                path == ".bmp" ||
-                                path == ".png" ||
-                                path == ".eps"){
-                              SwipeImageGallery(
-                                context: context,
-                                children: [
-                                  Image(
-                                      image: NetworkImage(circulars[index].filepath))
-                                ],
-                                initialIndex: 0,
-                              ).show();
-                            }else if(path == ".doc" ||
-                                path == ".docx" ||
-                                path == ".pdf" ||
-                                path == ".xls" ||
-                                path == ".xlsx" ||
-                                path == ".ppt" ||
-                                path == ".pptx" ||
-                                path == ".txt"){
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          PreveiwImage(
-                                              url: circulars[index]
-                                                  .filepath)));
-                            }
-                            else {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          WebveiwUI(
-                                              url: circulars[index]
-                                                  .filepath)));
-                            }
-                          },
-                          child: Ink(
-                            color: Colors.white,
-                            width: MediaQuery.of(context)
-                                .size
-                                .width,
-                            child: Container(
-                              margin: EdgeInsets.only(left: 10,right: 10),
-                    width: MediaQuery.of(context)
-                        .size.width,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        DateFormat('dd').format(date),
-                                        style: const TextStyle(
-                                            color: primarycolor, fontSize: 18),
-                                      ),
-                                      Text(
-                                        DateFormat('MMM').format(date),
-                                        style: const TextStyle(
-                                            color: primarycolor, fontSize: 14),
-                                      ),
-                                      Text(
-                                        DateFormat('yyyy').format(date),
-                                        style: const TextStyle(
-                                            color: primarycolor, fontSize: 10),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                        ValueListenableBuilder<bool>(
+                        valueListenable: status,
+                        builder: (context, value, child) {
+                          return GestureDetector(
+                            onTap: (){
+                              if(!circulars[index].readstatus) {
+                                markcircular(circulars[index].id);
+                                status.value= true;
+                              }
+                              String path = p.extension(circulars[index].filepath);
+                              if(path == ".jpg" ||
+                                  path == ".jpeg" ||
+                                  path == ".tif" ||
+                                  path == ".gif" ||
+                                  path == ".tiff" ||
+                                  path == ".bmp" ||
+                                  path == ".png" ||
+                                  path == ".eps"){
+                                SwipeImageGallery(
+                                  context: context,
+                                  children: [
+                                    Image(
+                                        image: NetworkImage(circulars[index].filepath))
+                                  ],
+                                  initialIndex: 0,
+                                ).show();
+                              }else if(path == ".doc" ||
+                                  path == ".docx" ||
+                                  path == ".pdf" ||
+                                  path == ".xls" ||
+                                  path == ".xlsx" ||
+                                  path == ".ppt" ||
+                                  path == ".pptx" ||
+                                  path == ".txt"){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            PreveiwImage(
+                                                url: circulars[index]
+                                                    .filepath)));
+                              }
+                              else {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            WebveiwUI(
+                                                url: circulars[index]
+                                                    .filepath)));
+                              }
+                            },
+                            child: Ink(
+                              color: Colors.white,
+                              width: MediaQuery.of(context)
+                                  .size
+                                  .width,
+                              child: Container(
+                                margin: EdgeInsets.only(left: 10,right: 10),
+                                width: MediaQuery.of(context)
+                                    .size.width,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
-                                        if (circulars[index]
-                                            .noticetitle
-                                            .toString() !=
-                                            "")
-                                          Text(
-                                            circulars[index].noticetitle,
-                                            maxLines: null,
-                                            softWrap: true,
-                                            style: GoogleFonts.lato(
-                                              textStyle: const TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        if (circulars[index]
-                                            .description
-                                            .toString() !=
-                                            "")
-                                          Text(
-                                            circulars[index].description,
-                                            maxLines: null,
-                                            softWrap: true,
-                                            style: const TextStyle(fontSize: 14),
-                                          ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children: [
-                                            if (circulars[index].fileext ==
-                                                "xlsx" ||
-                                                circulars[index].fileext == "pdf" ||
-                                                circulars[index].fileext == "docx")
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 5.0),
-                                                child: const Icon(
-                                                  CupertinoIcons.doc_plaintext,
-                                                  color: secondarycolor,
-                                                ),
-                                              ),
-                                            if (circulars[index].fileext == "mp4")
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 5.0),
-                                                child: const Icon(
-                                                  CupertinoIcons.play_rectangle,
-                                                  color: secondarycolor,
-                                                ),
-                                              ),
-                                            if (circulars[index].fileext == "jpeg" ||
-                                                circulars[index].fileext == "jpg" ||
-                                                circulars[index].fileext == "png" ||
-                                                circulars[index].fileext == "tif" ||
-                                                circulars[index].fileext ==
-                                                    "tiff" ||
-                                                circulars[index].fileext == "gif" ||
-                                                circulars[index].fileext == "bmp" ||
-                                                circulars[index].fileext == "eps")
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 5.0),
-                                                child: const Icon(
-                                                  CupertinoIcons.photo,
-                                                  color: secondarycolor,
-                                                ),
-                                              ),
-                                            if (circulars[index].fileext != "jpeg" &&
-                                                circulars[index].fileext != "jpg" &&
-                                                circulars[index].fileext != "png" &&
-                                                circulars[index].fileext != "tif" &&
-                                                circulars[index].fileext !=
-                                                    "tiff" &&
-                                                circulars[index].fileext != "gif" &&
-                                                circulars[index].fileext != "bmp" &&
-                                                circulars[index].fileext != "eps" &&
-                                                circulars[index].fileext != "mp4" &&
-                                                circulars[index].fileext !=
-                                                    "xlsx" &&
-                                                circulars[index].fileext != "pdf" &&
-                                                circulars[index].fileext != "docx")
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 5.0),
-                                                child: const Icon(
-                                                  CupertinoIcons.link,
-                                                  color: secondarycolor,
-                                                ),
-                                              ),
-                                          ],
-                                        )
+                                        Text(
+                                          DateFormat('dd').format(date),
+                                          style: const TextStyle(
+                                              color: primarycolor, fontSize: 18),
+                                        ),
+                                        Text(
+                                          DateFormat('MMM').format(date),
+                                          style: const TextStyle(
+                                              color: primarycolor, fontSize: 14),
+                                        ),
+                                        Text(
+                                          DateFormat('yyyy').format(date),
+                                          style: const TextStyle(
+                                              color: primarycolor, fontSize: 10),
+                                        ),
                                       ],
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          if (circulars[index]
+                                              .noticetitle
+                                              .toString() !=
+                                              "")
+                                            Text(
+                                              circulars[index].noticetitle,
+                                              maxLines: null,
+                                              softWrap: true,
+                                              style: GoogleFonts.lato(
+                                                textStyle: TextStyle(
+                                                  fontSize: 17,
+                                                  fontWeight: status.value ?FontWeight.normal:FontWeight.bold,
+                                                  color:status.value ? Colors.grey:Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                          if (circulars[index]
+                                              .description
+                                              .toString() !=
+                                              "")
+                                            Text(
+                                              circulars[index].description,
+                                              maxLines: null,
+                                              softWrap: true,
+                                              style:TextStyle(fontSize: 14,
+                                                color: status.value? Colors.grey:Colors.black,),
+                                            ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              if (circulars[index].fileext ==
+                                                  "xlsx" ||
+                                                  circulars[index].fileext == "pdf" ||
+                                                  circulars[index].fileext == "docx")
+                                                Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      left: 5.0),
+                                                  child: const Icon(
+                                                    CupertinoIcons.doc_plaintext,
+                                                    color: secondarycolor,
+                                                  ),
+                                                ),
+                                              if (circulars[index].fileext == "mp4")
+                                                Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      left: 5.0),
+                                                  child: const Icon(
+                                                    CupertinoIcons.play_rectangle,
+                                                    color: secondarycolor,
+                                                  ),
+                                                ),
+                                              if (circulars[index].fileext == "jpeg" ||
+                                                  circulars[index].fileext == "jpg" ||
+                                                  circulars[index].fileext == "png" ||
+                                                  circulars[index].fileext == "tif" ||
+                                                  circulars[index].fileext ==
+                                                      "tiff" ||
+                                                  circulars[index].fileext == "gif" ||
+                                                  circulars[index].fileext == "bmp" ||
+                                                  circulars[index].fileext == "eps")
+                                                Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      left: 5.0),
+                                                  child: const Icon(
+                                                    CupertinoIcons.photo,
+                                                    color: secondarycolor,
+                                                  ),
+                                                ),
+                                              if (circulars[index].fileext != "jpeg" &&
+                                                  circulars[index].fileext != "jpg" &&
+                                                  circulars[index].fileext != "png" &&
+                                                  circulars[index].fileext != "tif" &&
+                                                  circulars[index].fileext !=
+                                                      "tiff" &&
+                                                  circulars[index].fileext != "gif" &&
+                                                  circulars[index].fileext != "bmp" &&
+                                                  circulars[index].fileext != "eps" &&
+                                                  circulars[index].fileext != "mp4" &&
+                                                  circulars[index].fileext !=
+                                                      "xlsx" &&
+                                                  circulars[index].fileext != "pdf" &&
+                                                  circulars[index].fileext != "docx")
+                                                Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      left: 5.0),
+                                                  child: const Icon(
+                                                    CupertinoIcons.link,
+                                                    color: secondarycolor,
+                                                  ),
+                                                ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ),
+                          );
+                        }),
                         SizedBox(
                             width: MediaQuery.of(context).size.width / 1.2,
                             child: const Divider(
@@ -478,200 +490,209 @@ class _CircularHomeState extends State<CircularHome> {
           itemBuilder: (BuildContext context, int index) {
             DateTime date =
             DateTime.parse("${circulars[_filterList[index]].noticedate}");
+            ValueNotifier<bool>status=ValueNotifier(circulars[_filterList[index]].readstatus);
             return Column(
               children: [
-                GestureDetector(
-                  onTap: (){
-                    String path = p.extension(circulars[_filterList[index]].filepath);
-                    if(path == ".jpg" ||
-                        path == ".jpeg" ||
-                        path == ".tif" ||
-                        path == ".gif" ||
-                        path == ".tiff" ||
-                        path == ".bmp" ||
-                        path == ".png" ||
-                        path == ".eps"){
-                      SwipeImageGallery(
-                        context: context,
-                        children: [
-                          Image(
-                              image: NetworkImage(circulars[_filterList[index]].filepath))
-                        ],
-                        initialIndex: 0,
-                      ).show();
-                    }else if(path == ".doc" ||
-                        path == ".docx" ||
-                        path == ".pdf" ||
-                        path == ".xls" ||
-                        path == ".xlsx" ||
-                        path == ".ppt" ||
-                        path == ".pptx" ||
-                        path == ".txt"){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  PreveiwImage(
-                                      url: circulars[_filterList[index]]
-                                          .filepath)));
-                    }
-                    else {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  WebveiwUI(
-                                      url: circulars[_filterList[index]]
-                                          .filepath)));
-                    }
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            DateFormat('dd').format(date),
-                            style: const TextStyle(color: primarycolor, fontSize: 18),
-                          ),
-                          Text(
-                            DateFormat('MMM').format(date),
-                            style: const TextStyle(color: primarycolor, fontSize: 14),
-                          ),
-                          Text(
-                            DateFormat('yyyy').format(date),
-                            style: const TextStyle(color: primarycolor, fontSize: 10),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: Column(
+                ValueListenableBuilder<bool>(
+                    valueListenable: status,
+                    builder: (context, value, child) {
+                      return GestureDetector(
+                        onTap: (){
+                          String path = p.extension(circulars[_filterList[index]].filepath);
+                          if(!circulars[_filterList[index]].readstatus){
+                            markcircular(circulars[_filterList[index]].id);
+                            circulars[_filterList[index]].readstatus = true;
+                          }
+                          if(path == ".jpg" ||
+                              path == ".jpeg" ||
+                              path == ".tif" ||
+                              path == ".gif" ||
+                              path == ".tiff" ||
+                              path == ".bmp" ||
+                              path == ".png" ||
+                              path == ".eps"){
+                            SwipeImageGallery(
+                              context: context,
+                              children: [
+                                Image(
+                                    image: NetworkImage(circulars[_filterList[index]].filepath))
+                              ],
+                              initialIndex: 0,
+                            ).show();
+                          }else if(path == ".doc" ||
+                              path == ".docx" ||
+                              path == ".pdf" ||
+                              path == ".xls" ||
+                              path == ".xlsx" ||
+                              path == ".ppt" ||
+                              path == ".pptx" ||
+                              path == ".txt"){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        PreveiwImage(
+                                            url: circulars[_filterList[index]]
+                                                .filepath)));
+                          }
+                          else {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        WebveiwUI(
+                                            url: circulars[_filterList[index]]
+                                                .filepath)));
+                          }
+                        },
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if (circulars[_filterList[index]]
-                                .noticetitle
-                                .toString() !=
-                                "")
-                              Text(
-                                circulars[_filterList[index]].noticetitle,
-                                maxLines: null,
-                                softWrap: true,
-                                style: GoogleFonts.lato(
-                                  textStyle: const TextStyle(
-                                    fontSize: 18,
-                                    color: secondarycolor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            if (circulars[_filterList[index]]
-                                .description
-                                .toString() !=
-                                "")
-                              Text(
-                                circulars[_filterList[index]].description,
-                                maxLines: null,
-                                softWrap: true,
-                                style: const TextStyle(fontSize: 15),
-                              ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                if (circulars[_filterList[index]].fileext ==
-                                    "xlsx" ||
-                                    circulars[_filterList[index]].fileext ==
-                                        "pdf" ||
-                                    circulars[_filterList[index]].fileext ==
-                                        "docx")
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5.0),
-                                    child: const Icon(
-                                      CupertinoIcons.doc_plaintext,
-                                      color: secondarycolor,
-                                    ),
-                                  ),
-                                if (circulars[_filterList[index]].fileext ==
-                                    "mp4")
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5.0),
-                                    child: const Icon(
-                                      CupertinoIcons.play_rectangle,
-                                      color: secondarycolor,
-                                    ),
-                                  ),
-                                if (circulars[_filterList[index]].fileext ==
-                                    "jpeg" ||
-                                    circulars[_filterList[index]].fileext ==
-                                        "jpg" ||
-                                    circulars[_filterList[index]].fileext ==
-                                        "png" ||
-                                    circulars[
-                                    _filterList[index]]
-                                        .fileext ==
-                                        "tif" ||
-                                    circulars[_filterList[index]].fileext ==
-                                        "tiff" ||
-                                    circulars[_filterList[index]].fileext ==
-                                        "gif" ||
-                                    circulars[_filterList[index]].fileext ==
-                                        "bmp" ||
-                                    circulars[_filterList[index]].fileext ==
-                                        "eps")
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5.0),
-                                    child: const Icon(
-                                      CupertinoIcons.photo,
-                                      color: secondarycolor,
-                                    ),
-                                  ),
-                                if (circulars[_filterList[index]].fileext !=
-                                    "jpeg" &&
-                                    circulars[_filterList[index]].fileext !=
-                                        "jpg" &&
-                                    circulars[_filterList[index]].fileext !=
-                                        "png" &&
-                                    circulars[
-                                    _filterList[index]]
-                                        .fileext !=
-                                        "tif" &&
-                                    circulars[_filterList[index]].fileext !=
-                                        "tiff" &&
-                                    circulars[_filterList[index]].fileext !=
-                                        "gif" &&
-                                    circulars[_filterList[index]].fileext !=
-                                        "bmp" &&
-                                    circulars[_filterList[index]].fileext !=
-                                        "eps" &&
-                                    circulars[
-                                    _filterList[index]]
-                                        .fileext !=
-                                        "mp4" &&
-                                    circulars[_filterList[index]].fileext !=
-                                        "xlsx" &&
-                                    circulars[_filterList[index]].fileext !=
-                                        "pdf" &&
-                                    circulars[_filterList[index]].fileext !=
-                                        "docx")
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5.0),
-                                    child: const Icon(
-                                      CupertinoIcons.cloud,
-                                      color: secondarycolor,
-                                    ),
-                                  ),
+                                Text(
+                                  DateFormat('dd').format(date),
+                                  style: const TextStyle(color: primarycolor, fontSize: 18),
+                                ),
+                                Text(
+                                  DateFormat('MMM').format(date),
+                                  style: const TextStyle(color: primarycolor, fontSize: 14),
+                                ),
+                                Text(
+                                  DateFormat('yyyy').format(date),
+                                  style: const TextStyle(color: primarycolor, fontSize: 10),
+                                ),
                               ],
-                            )
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (circulars[_filterList[index]]
+                                      .noticetitle
+                                      .toString() !=
+                                      "")
+                                    Text(
+                                      circulars[_filterList[index]].noticetitle,
+                                      maxLines: null,
+                                      softWrap: true,
+                                      style: GoogleFonts.lato(
+                                        textStyle:TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: status.value ? FontWeight.normal :FontWeight.bold,
+                                          color: status.value ? Colors.grey:Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  if (circulars[_filterList[index]]
+                                      .description
+                                      .toString() !=
+                                      "")
+                                    Text(
+                                      circulars[_filterList[index]].description,
+                                      maxLines: null,
+                                      softWrap: true,
+                                      style:TextStyle(fontSize: 15,
+                                        color: status.value ? Colors.grey:Colors.black,),
+                                    ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      if (circulars[_filterList[index]].fileext ==
+                                          "xlsx" ||
+                                          circulars[_filterList[index]].fileext ==
+                                              "pdf" ||
+                                          circulars[_filterList[index]].fileext ==
+                                              "docx")
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 5.0),
+                                          child: const Icon(
+                                            CupertinoIcons.doc_plaintext,
+                                            color: secondarycolor,
+                                          ),
+                                        ),
+                                      if (circulars[_filterList[index]].fileext ==
+                                          "mp4")
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 5.0),
+                                          child: const Icon(
+                                            CupertinoIcons.play_rectangle,
+                                            color: secondarycolor,
+                                          ),
+                                        ),
+                                      if (circulars[_filterList[index]].fileext ==
+                                          "jpeg" ||
+                                          circulars[_filterList[index]].fileext ==
+                                              "jpg" ||
+                                          circulars[_filterList[index]].fileext ==
+                                              "png" ||
+                                          circulars[
+                                          _filterList[index]]
+                                              .fileext ==
+                                              "tif" ||
+                                          circulars[_filterList[index]].fileext ==
+                                              "tiff" ||
+                                          circulars[_filterList[index]].fileext ==
+                                              "gif" ||
+                                          circulars[_filterList[index]].fileext ==
+                                              "bmp" ||
+                                          circulars[_filterList[index]].fileext ==
+                                              "eps")
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 5.0),
+                                          child: const Icon(
+                                            CupertinoIcons.photo,
+                                            color: secondarycolor,
+                                          ),
+                                        ),
+                                      if (circulars[_filterList[index]].fileext !=
+                                          "jpeg" &&
+                                          circulars[_filterList[index]].fileext !=
+                                              "jpg" &&
+                                          circulars[_filterList[index]].fileext !=
+                                              "png" &&
+                                          circulars[
+                                          _filterList[index]]
+                                              .fileext !=
+                                              "tif" &&
+                                          circulars[_filterList[index]].fileext !=
+                                              "tiff" &&
+                                          circulars[_filterList[index]].fileext !=
+                                              "gif" &&
+                                          circulars[_filterList[index]].fileext !=
+                                              "bmp" &&
+                                          circulars[_filterList[index]].fileext !=
+                                              "eps" &&
+                                          circulars[
+                                          _filterList[index]]
+                                              .fileext !=
+                                              "mp4" &&
+                                          circulars[_filterList[index]].fileext !=
+                                              "xlsx" &&
+                                          circulars[_filterList[index]].fileext !=
+                                              "pdf" &&
+                                          circulars[_filterList[index]].fileext !=
+                                              "docx")
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 5.0),
+                                          child: const Icon(
+                                            CupertinoIcons.cloud,
+                                            color: secondarycolor,
+                                          ),
+                                        ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-
+                      );
+                    }),
                 // if(index == 1)
                 // Container(
                 //     margin: EdgeInsets.only(top:10),
@@ -722,6 +743,7 @@ _appBar(context) {
     leading: GestureDetector(
       onTap: () async{
         await getunreadcount();
+        await getunreadtitles();
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
             NewDashbBard(
               currentIndex: 0,

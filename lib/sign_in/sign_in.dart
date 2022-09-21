@@ -97,265 +97,268 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      key: _scaffoldKey,
-      body: ValueListenableBuilder<bool>(
-          valueListenable: forgotpasswordui,
-          builder: (context, value, child) {
-            return
-              forgotpasswordui.value ?
-      ForgotPasswordui(
-        username: forget_username,
-        mobilenumber: forget_mobile,
-        userid: forgetpassword_userid,
-        otp: otp,
-      ):
-            SafeArea(
-              child:
-              Center(
-                child: SingleChildScrollView(
-                  child: SizedBox(
-                    height: 290,
-                    child: Stack(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 15.0),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 2.0, vertical: 2.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40.0),
-                            gradient: const LinearGradient(
-                              begin: Alignment.bottomRight,
-                              end: Alignment.topCenter,
-                              colors: [
-                                secondarycolor,
-                                Colors.white,
-                                //style.Style.lowerGradientColor,
-                              ],
-                            ),
-                          ),
-                          // BoxDecoration(
-                          //   color: Colors.white,
-                          //   borderRadius: BorderRadius.circular(40.0),
-                          // ),
-                          child: Container(
-                            width: double.infinity,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        key: _scaffoldKey,
+        body: ValueListenableBuilder<bool>(
+            valueListenable: forgotpasswordui,
+            builder: (context, value, child) {
+              return
+                forgotpasswordui.value ?
+        ForgotPasswordui(
+          username: forget_username,
+          mobilenumber: forget_mobile,
+          userid: forgetpassword_userid,
+          otp: otp,
+        ):
+              SafeArea(
+                child:
+                Center(
+                  child: SingleChildScrollView(
+                    child: SizedBox(
+                      height: 290,
+                      child: Stack(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 15.0),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 20.0),
+                                horizontal: 2.0, vertical: 2.0),
                             decoration: BoxDecoration(
-                              color: Colors.white,
                               borderRadius: BorderRadius.circular(40.0),
-                            ),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  // Center(
-                                  //     child: Image.asset(
-                                  //       "assets/choice_logo.png",
-                                  //       height: 25,
-                                  //     )),
-                                  // SizedBox(
-                                  //   height: 15,
-                                  // ),
-                                  Center(
-                                    child: Image.asset(
-                                      "assets/InsightsELogo.png",
-                                      width: MediaQuery.of(context).size.width/3,
-                                    ),
-                                  ),
-                                  SizedBox(height: 10,),
-                                  ValueListenableBuilder<bool>(
-                                      valueListenable: forgotpassword,
-                                      builder: (context, value, child) {
-                                        return AnimatedCrossFade(
-                                            firstChild: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                TrackingTextInput(
-                                                  onTextChanged: (String email) {
-                                                    _email = email;
-                                                  },
-                                                  label: "Username",
-                                                  // onCaretMoved: (Offset caret) {
-                                                  //   _teddyController
-                                                  //       .lookAt(caret);
-                                                  // },
-                                                  icon: Icons.person,
-                                                  enable: !_isLoading,
-                                                ),
-                                                Row(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: <Widget>[
-                                                    Expanded(
-                                                      child: TrackingTextInput(
-                                                        label: "Password",
-                                                        isObscured: _isObscured,
-                                                        // onCaretMoved:
-                                                        //     (Offset caret) {
-                                                        //   _teddyController
-                                                        //       .coverEyes(
-                                                        //           caret != null);
-                                                        //   _teddyController
-                                                        //       .lookAt(null);
-                                                        // },
-                                                        onTextChanged:
-                                                            (String password) {
-                                                          _password = password;
-                                                        },
-                                                        icon: Icons.lock,
-                                                        enable: !_isLoading,
-                                                      ),
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          _isObscured =
-                                                              !_isObscured;
-                                                        });
-                                                      },
-                                                      child: Icon(
-                                                          _isObscured
-                                                              ? Icons.visibility
-                                                              : Icons
-                                                                  .visibility_off,
-                                                          color: Colors.black45),
-                                                    ),
-                                                  ],
-                                                ),
-                                                TextButton(
-                                                    onPressed: () {
-                                                      forgotpassword.value = true;
-                                                    },
-                                                    child: Text(
-                                                      "Forgot Password ?",
-                                                      style: TextStyle(
-                                                          color: secondarycolor,
-                                                          fontSize: 12),
-                                                    )),
-                                              ],
-                                            ),
-                                            secondChild: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                TrackingTextInput(
-                                                  onTextChanged: (String email) {
-                                                    _email = email;
-                                                  },
-                                                  label: "username",
-                                                  onCaretMoved: (Offset caret) {
-                                                    _teddyController.lookAt(caret);
-                                                  },
-                                                  icon: Icons.person,
-                                                  enable: !_isLoading,
-                                                ),
-                                                TrackingTextInput(
-                                                  label: "Mobile Number",
-                                                  isObscured: false,
-                                                  onCaretMoved: (Offset caret) {
-                                                    _teddyController
-                                                        .coverEyes(caret != null);
-                                                    _teddyController.lookAt(null);
-                                                  },
-                                                  onTextChanged: (String password) {
-                                                    _password = password;
-                                                  },
-                                                  icon: Icons.phone_iphone_rounded,
-                                                  enable: !_isLoading,
-                                                ),
-                                                TextButton(
-                                                    onPressed: () {
-                                                      forgotpassword.value = false;
-                                                    },
-                                                    child: Text(
-                                                      "Login",
-                                                      style: TextStyle(
-                                                          color: secondarycolor,
-                                                          fontSize: 12),
-                                                    )),
-                                              ],
-                                            ),
-                                            crossFadeState: forgotpassword.value
-                                                ? CrossFadeState.showSecond
-                                                : CrossFadeState.showFirst,
-                                            duration:
-                                                const Duration(milliseconds: 200));
-                                      }),
-                                  SizedBox(
-                                    height: 20,
-                                  )
+                              gradient: const LinearGradient(
+                                begin: Alignment.bottomRight,
+                                end: Alignment.topCenter,
+                                colors: [
+                                  secondarycolor,
+                                  Colors.white,
+                                  //style.Style.lowerGradientColor,
                                 ],
                               ),
                             ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: MediaQuery.of(context).size.width / 2),
-                              child: ValueListenableBuilder<int>(
-                                  valueListenable: progress,
-                                  builder: (context, value, child) {
-                                    return FloatingActionButton(
-                                      onPressed: () async{
-                                        if(forgotpassword.value == true){
-                                          if (_email.isEmpty && _password.isEmpty) {
-                                            _showSnackBar('Please Enter Valid Information',context);
-                                          }else {
-                                            progress.value = 1;
-                                            if (await forogotpasswordapi(_email,_password,context)) {
-                                              forget_mobile = _password;
-                                              forget_username = _email;
-                                              progress.value = 0;
-                                              forgotpasswordui.value = true;
-                                            }
-                                            else{
-                                              progress.value = 0;
-                                            }
-                                          }
-                                        }else {
-                                          onPressed1();
-                                        }
-                                      },
-                                      tooltip: "Sign in",
-                                      child: progress.value == 0
-                                          ? Icon(
-                                              Icons.arrow_forward_ios_rounded,
-                                              color:
-                                                  secondarycolor.withOpacity(0.5),
-                                            )
-                                          : progress.value == 1
-                                              ? SizedBox(
-                                                  height: 25,
-                                                  width: 25,
-                                                  child: CircularProgressIndicator(
-                                                    color: secondarycolor,
+                            // BoxDecoration(
+                            //   color: Colors.white,
+                            //   borderRadius: BorderRadius.circular(40.0),
+                            // ),
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 20.0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(40.0),
+                              ),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: <Widget>[
+                                    // Center(
+                                    //     child: Image.asset(
+                                    //       "assets/choice_logo.png",
+                                    //       height: 25,
+                                    //     )),
+                                    // SizedBox(
+                                    //   height: 15,
+                                    // ),
+                                    Center(
+                                      child: Image.asset(
+                                        "assets/InsightsELogo.png",
+                                        width: MediaQuery.of(context).size.width/3,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10,),
+                                    ValueListenableBuilder<bool>(
+                                        valueListenable: forgotpassword,
+                                        builder: (context, value, child) {
+                                          return AnimatedCrossFade(
+                                              firstChild: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  TrackingTextInput(
+                                                    onTextChanged: (String email) {
+                                                      _email = email;
+                                                    },
+                                                    label: "Username",
+                                                    // onCaretMoved: (Offset caret) {
+                                                    //   _teddyController
+                                                    //       .lookAt(caret);
+                                                    // },
+                                                    icon: Icons.person,
+                                                    enable: !_isLoading,
                                                   ),
-                                                )
-                                              : Icon(
-                                                  Icons.check,
-                                                  color: Colors.white,
-                                                ),
-                                      backgroundColor: progress.value == 1
-                                          ? Colors.white
-                                          : progress.value == 2
-                                              ? Colors.green
-                                              : borderyellow,
-                                    );
-                                  })),
-                        )
-                      ],
+                                                  Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      Expanded(
+                                                        child: TrackingTextInput(
+                                                          label: "Password",
+                                                          isObscured: _isObscured,
+                                                          // onCaretMoved:
+                                                          //     (Offset caret) {
+                                                          //   _teddyController
+                                                          //       .coverEyes(
+                                                          //           caret != null);
+                                                          //   _teddyController
+                                                          //       .lookAt(null);
+                                                          // },
+                                                          onTextChanged:
+                                                              (String password) {
+                                                            _password = password;
+                                                          },
+                                                          icon: Icons.lock,
+                                                          enable: !_isLoading,
+                                                        ),
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            _isObscured =
+                                                                !_isObscured;
+                                                          });
+                                                        },
+                                                        child: Icon(
+                                                            _isObscured
+                                                                ? Icons.visibility
+                                                                : Icons
+                                                                    .visibility_off,
+                                                            color: Colors.black45),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        forgotpassword.value = true;
+                                                      },
+                                                      child: Text(
+                                                        "Forgot Password ?",
+                                                        style: TextStyle(
+                                                            color: secondarycolor,
+                                                            fontSize: 12),
+                                                      )),
+                                                ],
+                                              ),
+                                              secondChild: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  TrackingTextInput(
+                                                    onTextChanged: (String email) {
+                                                      _email = email;
+                                                    },
+                                                    label: "username",
+                                                    onCaretMoved: (Offset caret) {
+                                                      _teddyController.lookAt(caret);
+                                                    },
+                                                    icon: Icons.person,
+                                                    enable: !_isLoading,
+                                                  ),
+                                                  TrackingTextInput(
+                                                    label: "Mobile Number",
+                                                    isObscured: false,
+                                                    onCaretMoved: (Offset caret) {
+                                                      _teddyController
+                                                          .coverEyes(caret != null);
+                                                      _teddyController.lookAt(null);
+                                                    },
+                                                    onTextChanged: (String password) {
+                                                      _password = password;
+                                                    },
+                                                    icon: Icons.phone_iphone_rounded,
+                                                    enable: !_isLoading,
+                                                  ),
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        forgotpassword.value = false;
+                                                      },
+                                                      child: Text(
+                                                        "Login",
+                                                        style: TextStyle(
+                                                            color: secondarycolor,
+                                                            fontSize: 12),
+                                                      )),
+                                                ],
+                                              ),
+                                              crossFadeState: forgotpassword.value
+                                                  ? CrossFadeState.showSecond
+                                                  : CrossFadeState.showFirst,
+                                              duration:
+                                                  const Duration(milliseconds: 200));
+                                        }),
+                                    SizedBox(
+                                      height: 20,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Padding(
+                                padding: EdgeInsets.only(
+                                    left: MediaQuery.of(context).size.width / 2),
+                                child: ValueListenableBuilder<int>(
+                                    valueListenable: progress,
+                                    builder: (context, value, child) {
+                                      return FloatingActionButton(
+                                        onPressed: () async{
+                                          if(forgotpassword.value == true){
+                                            if (_email.isEmpty && _password.isEmpty) {
+                                              _showSnackBar('Please Enter Valid Information',context);
+                                            }else {
+                                              progress.value = 1;
+                                              if (await forogotpasswordapi(_email,_password,context)) {
+                                                forget_mobile = _password;
+                                                forget_username = _email;
+                                                progress.value = 0;
+                                                forgotpasswordui.value = true;
+                                              }
+                                              else{
+                                                progress.value = 0;
+                                              }
+                                            }
+                                          }else {
+                                            onPressed1();
+                                          }
+                                        },
+                                        tooltip: "Sign in",
+                                        child: progress.value == 0
+                                            ? Icon(
+                                                Icons.arrow_forward_ios_rounded,
+                                                color:
+                                                    secondarycolor.withOpacity(0.5),
+                                              )
+                                            : progress.value == 1
+                                                ? SizedBox(
+                                                    height: 25,
+                                                    width: 25,
+                                                    child: CircularProgressIndicator(
+                                                      color: secondarycolor,
+                                                    ),
+                                                  )
+                                                : Icon(
+                                                    Icons.check,
+                                                    color: Colors.white,
+                                                  ),
+                                        backgroundColor: progress.value == 1
+                                            ? Colors.white
+                                            : progress.value == 2
+                                                ? Colors.green
+                                                : borderyellow,
+                                      );
+                                    })),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
+              );
   }),
+      ),
     );
   }
 

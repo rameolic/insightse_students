@@ -17,6 +17,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:intl/intl.dart'; // for date format
 import 'package:intl/date_symbol_data_local.dart';
 import '../newdashboardui.dart';
+import '../api/unreadtitlesapi.dart';
 
 class ReportCard extends StatefulWidget {
   String url;
@@ -57,9 +58,11 @@ class _ReportCardState extends State<ReportCard> {
                           for(int i=0; i <List.from(cards.reversed).length;i++){
                             children.add(
                                 Events(
+                                  id:  List.from(cards.reversed)[i].id,
                                   title: List.from(cards.reversed)[i].cardname,
                                   attachments: List.from(cards.reversed)[i].attachment,
                                   publishedat:  List.from(cards.reversed)[i].publishedat,
+                                  status: List.from(cards.reversed)[i].readstatus,
                                 )
                             );
                           }
@@ -252,11 +255,14 @@ _appBar(context) {
     leading: GestureDetector(
       onTap: () async{
         Navigator.pop(context);
-        // await getunreadcount();
-        // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-        //     NewDashbBard(
-        //       currentIndex: 0,
-        //     )), (Route<dynamic> route) => false);
+        await getunreadcount();
+        await getunreadtitles();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =>  NewDashbBard(
+            currentIndex: 0,
+          )),
+        );
       },
       child: Icon(Icons.arrow_back_ios_sharp, color: secondarycolor),
     ),
@@ -272,15 +278,25 @@ class Events extends StatelessWidget {
   String title;
   String attachments;
   String publishedat;
-  Events({this.title,this.attachments,this.publishedat});
+  String id;
+  bool status;
+  Events({this.title,this.attachments,this.publishedat,this.id,this.status});
   @override
   List<Widget> children=[];
   Widget build(BuildContext context) {
    // for(int i=0;i<attachments.length;i++){
+    ValueNotifier<bool>readstatus=ValueNotifier(status);
       children.add(
-        GestureDetector(
+        ValueListenableBuilder<bool>(
+            valueListenable: readstatus,
+            builder: (context, value, child) {
+              return GestureDetector(
           onTap: (){
-            Navigator.push(
+            if(!readstatus.value){
+                  markreportcard(id);
+                  readstatus.value = true;
+                }
+                Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => PdfVeiw(
                 attachmentlink:attachments,
@@ -292,7 +308,7 @@ class Events extends StatelessWidget {
               margin: EdgeInsets.fromLTRB(10,5,10,5),
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: borderyellow,
+                  color: !readstatus.value ? primarycolor.withOpacity(0.6):borderyellow,
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
               child: Row(
@@ -309,7 +325,8 @@ class Events extends StatelessWidget {
                   Icon(CupertinoIcons.doc_plaintext,color: secondarycolor,)
                 ],
               )),
-        ),
+        );
+      }),
       );
 
     return Column(
