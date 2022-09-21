@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flushbar/flushbar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../circulars/circularhome.dart';
+import 'api/unreadtitlesapi.dart';
 import 'schoolinfo/schoolinfo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -440,8 +441,14 @@ class _HomePageState extends State<HomePage> {
                           MaterialPageRoute(builder: (context) => ReportCard()),
                         );
                       },
-                      child: _buildWikiCategory(CupertinoIcons.doc_richtext,
-                          "Report card", secondarycolor.withOpacity(0.7)),
+                      child:  Badge(
+    badgeColor: Colors.red[900],
+    toAnimate: true,
+    showBadge: newdata.reportcardcount == "0" ? false:true,
+    badgeContent: Text(newdata.reportcardcount,style: TextStyle(color: Colors.white),),
+                        child: _buildWikiCategory(CupertinoIcons.doc_richtext,
+                            "Report card", secondarycolor.withOpacity(0.7)),
+                      ),
                     ),
                     if(module.CIRCULARS)
                     GestureDetector(
@@ -451,8 +458,14 @@ class _HomePageState extends State<HomePage> {
                           MaterialPageRoute(builder: (context) => CircularHome()),
                         );
                       },
-                      child: _buildWikiCategory(SimpleLineIcons.screen_tablet,
-                          "Circulars", secondarycolor.withOpacity(0.7)),
+                      child:  Badge(
+                        badgeColor: Colors.red[900],
+                        toAnimate: true,
+                        showBadge: int.parse(newdata.circularscount) == 0 ? false:true,
+                        badgeContent: Text(newdata.circularscount,style: TextStyle(color: Colors.white),),
+                        child: _buildWikiCategory(SimpleLineIcons.screen_tablet,
+                            "Circulars", secondarycolor.withOpacity(0.7)),
+                      ),
                     ),
                     if(module.transportation)
                     GestureDetector(

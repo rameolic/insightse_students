@@ -11,9 +11,13 @@ class reportcard{
   String cardname;
   String attachment;
   String publishedat;
+  bool readstatus;
+  String id;
   reportcard({
+    this.id,
     this.attachment,
     this.cardname,
+    this.readstatus,
     this.publishedat
 });
 }
@@ -32,6 +36,7 @@ Future<bool>getreport(context) async {
     "org_id": Logindata.orgid,
     "batch_id": Logindata.batchid
   };
+  print(baseurl + "reportcards/academic/student/${Logindata.master_id}/published/list");
   http.Response response = await http.post(
       Uri.parse(baseurl + "reportcards/academic/student/${Logindata.master_id}/published/list"),
       headers: headers,
@@ -44,9 +49,11 @@ Future<bool>getreport(context) async {
       for(int i=0;i<decodeddata['data'].length;i++){
         cards.add(
             reportcard(
+              id: decodeddata['data'][i]['rc_id'],
               cardname: decodeddata['data'][i]['rc_name'],
               attachment: decodeddata['data'][i]['rc_attachment'],
               publishedat: decodeddata['data'][i]['published_at'],
+              readstatus: decodeddata['data'][i]['read_status'].toString() == "1"?true:false,
             )
         );
       }
