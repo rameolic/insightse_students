@@ -371,7 +371,7 @@ class ChatScreen extends StatelessWidget with WidgetsBindingObserver {
                                   }
                                   loading.value = true;
                                   var decodeddata = jsonDecode(event);
-                                  print(decodeddata);
+                                  print("socket data : $decodeddata");
                                   if (decodeddata['sender_message_id']
                                               .toString() ==
                                           "$receiverid" ||
@@ -398,33 +398,61 @@ class ChatScreen extends StatelessWidget with WidgetsBindingObserver {
                                         reversed = true;
 
                                         if (chatconversations.length > 0) {
-                                          chatconversations.insert(
-                                              0,
-                                              message(
-                                                  time: decodeddata['time']
-                                                      .toString(),
-                                                  senderid: decodeddata[
-                                                  'sender_message_id']
-                                                      .toString(),
-                                                  receiverid: decodeddata[
-                                                  'receiver_message_id']
-                                                      .toString(),
-                                                  messagecontent:
-                                                  decodeddata['message']
-                                                      .toString(),
-                                                  attachment:
-                                                  decodeddata['attachment']
-                                                      .toString()
-                                                      .split("<,>"),
-                                                  sendername:
-                                                  decodeddata['sender_name']
-                                                      .toString(),
-                                                  readstatus:
-                                                  decodeddata['read_status']
-                                                      .toString(),
-                                                isdeleted: false
-                                              ));
-                                        }
+                                          if(attachmentfile != null){
+                                                  chatconversations.insert(
+                                                      0,
+                                                      message(
+                                                          time: decodeddata['time']
+                                                              .toString(),
+                                                          senderid: decodeddata[
+                                                                  'sender_message_id']
+                                                              .toString(),
+                                                          receiverid: decodeddata[
+                                                                  'receiver_message_id']
+                                                              .toString(),
+                                                          messagecontent:
+                                                              decodeddata[
+                                                                      'message']
+                                                                  .toString(),
+                                                          attachment: decodeddata[
+                                                                  'attachment']
+                                                              .toString()
+                                                              .split("<,>"),
+                                                          sendername: decodeddata[
+                                                                  'sender_name']
+                                                              .toString(),
+                                                          readstatus: decodeddata[
+                                                                  'read_status']
+                                                              .toString(),
+                                                          isdeleted: false));
+                                                }else{
+                                            attachmentfile = null;
+                                            addmessages([message(
+                                                time: decodeddata['time']
+                                                    .toString(),
+                                                senderid: decodeddata[
+                                                'sender_message_id']
+                                                    .toString(),
+                                                receiverid: decodeddata[
+                                                'receiver_message_id']
+                                                    .toString(),
+                                                messagecontent:
+                                                decodeddata[
+                                                'message']
+                                                    .toString(),
+                                                attachment: decodeddata[
+                                                'attachment']
+                                                    .toString()
+                                                    .split("<,>"),
+                                                sendername: decodeddata[
+                                                'sender_name']
+                                                    .toString(),
+                                                readstatus: decodeddata[
+                                                'read_status']
+                                                    .toString(),
+                                                isdeleted: false)], context);
+                                          }
+                                              }
                                       }
                                     }
                                   } else {
@@ -535,80 +563,82 @@ class ChatScreen extends StatelessWidget with WidgetsBindingObserver {
                                     ),
                                   if (attachmentfile != null &&
                                       chatconversations.length > 0)
-                                    ConstrainedBox(
-                                      constraints: BoxConstraints(
-                                        maxWidth:
-                                            MediaQuery.of(context).size.width /
-                                                1.5,
-                                        minHeight:
-                                            MediaQuery.of(context).size.height /
-                                                2.5,
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            right: 0.0, bottom: 10.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Container(
-                                              margin: EdgeInsets.only(right: 10),
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Colors.blueGrey,
-                                                      width: 2.0),
-                                                  borderRadius: BorderRadius.all(
-                                                      Radius.circular(12))),
-                                              child: ConstrainedBox(
-                                                constraints: BoxConstraints(
-                                                    maxHeight:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height /
-                                                            3),
-                                                child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(12),
-                                                    child: BlurFilter(
-                                                      child: p.extension(
-                                                                      attachmentfile
-                                                                          .path) ==
-                                                                  ".jpg" ||
-                                                              p.extension(attachmentfile.path) ==
-                                                                  ".jpeg" ||
-                                                              p.extension(attachmentfile.path) ==
-                                                                  ".tif" ||
-                                                              p.extension(
-                                                                      attachmentfile
-                                                                          .path) ==
-                                                                  ".gif" ||
-                                                              p.extension(
-                                                                      attachmentfile
-                                                                          .path) ==
-                                                                  ".tiff" ||
-                                                              p.extension(
-                                                                      attachmentfile
-                                                                          .path) ==
-                                                                  ".bmp" ||
-                                                              p.extension(
-                                                                      attachmentfile
-                                                                          .path) ==
-                                                                  ".png" ||
-                                                              p.extension(
-                                                                      attachmentfile.path) ==
-                                                                  ".eps"
-                                                          ? Image.file(attachmentfile)
-                                                          : Container(
-                                                              height: 50,
-                                                              color: Colors
-                                                                  .transparent,
-                                                            ),
-                                                    )),
-                                              ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            maxWidth:
+                                                MediaQuery.of(context).size.width /
+                                                    1.5,
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 0.0, bottom: 10.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(right: 10),
+                                                  decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color: Colors.blueGrey,
+                                                          width: 2.0),
+                                                      borderRadius: BorderRadius.all(
+                                                          Radius.circular(12))),
+                                                  child: ConstrainedBox(
+                                                    constraints: BoxConstraints(
+                                                        maxHeight:
+                                                            MediaQuery.of(context)
+                                                                    .size
+                                                                    .height /
+                                                                3),
+                                                    child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.circular(12),
+                                                        child: BlurFilter(
+                                                          child: p.extension(
+                                                                          attachmentfile
+                                                                              .path) ==
+                                                                      ".jpg" ||
+                                                                  p.extension(attachmentfile.path) ==
+                                                                      ".jpeg" ||
+                                                                  p.extension(attachmentfile.path) ==
+                                                                      ".tif" ||
+                                                                  p.extension(
+                                                                          attachmentfile
+                                                                              .path) ==
+                                                                      ".gif" ||
+                                                                  p.extension(
+                                                                          attachmentfile
+                                                                              .path) ==
+                                                                      ".tiff" ||
+                                                                  p.extension(
+                                                                          attachmentfile
+                                                                              .path) ==
+                                                                      ".bmp" ||
+                                                                  p.extension(
+                                                                          attachmentfile
+                                                                              .path) ==
+                                                                      ".png" ||
+                                                                  p.extension(
+                                                                          attachmentfile.path) ==
+                                                                      ".eps"
+                                                              ? Image.file(attachmentfile)
+                                                              : Container(
+                                                                  height: 50,
+                                                                  color: Colors
+                                                                      .transparent,
+                                                                ),
+                                                        )),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
+                                      ],
                                     ),
                                   if (chatconversations.length == 0)
                                     Expanded(
