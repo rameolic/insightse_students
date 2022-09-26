@@ -121,7 +121,7 @@ addmessages(List<message> chatconversations, context) {
       if(!chatconversations[i].isdeleted){
         if ((chatconversations[i].attachment.toString() == "[null]" ||
                 chatconversations[i].attachment.toString() == "[]") &&
-            chatconversations[i].messagecontent.toString() != "") {
+            chatconversations[i].messagecontent.toString() != "null") {
           data.messages.add(Row(
             children: [
               SizedBox(
@@ -793,7 +793,7 @@ addmessages(List<message> chatconversations, context) {
       if(!chatconversations[i].isdeleted){
         if ((chatconversations[i].attachment.toString() == "[null]" ||
                 chatconversations[i].attachment.toString() == "[]") &&
-            chatconversations[i].messagecontent.toString() != "") {
+            chatconversations[i].messagecontent.toString() != "null") {
           data.messages.add(Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -1382,7 +1382,13 @@ class AttachmentPreveiw extends StatelessWidget {
                   ? Chewie(
                       controller: _chewieController,
                     )
-                  : PDF().fromPath(attachmentpath)),
+          //         :
+          // (p.extension(attachmentpath) == ".mp3")
+          //     ? Chewie(
+          //   controller: _chewieController,
+          // )
+              :
+          PDF().fromPath(attachmentpath)),
       floatingActionButton: FloatingActionButton(
           elevation: 3.0,
           child: new Icon(
@@ -1392,20 +1398,6 @@ class AttachmentPreveiw extends StatelessWidget {
           backgroundColor: borderyellow,
           onPressed: () async {
             attachmentfile = File(attachmentpath);
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                    builder: (context) => ChatScreen(
-                          chatname: name,
-                          receiverid: receiverid,
-                          designation: designation,
-                          department: department,
-                          gender: gender,
-                          classname: classname,
-                          division: division,
-                          profileimage: profile,
-                          canrespond: true,
-                        )),
-                (Route<dynamic> route) => false);
             String link = await getattachmenturl(attachmentpath);
             print("link : " + link);
             Map body = {
@@ -1421,7 +1413,21 @@ class AttachmentPreveiw extends StatelessWidget {
               channel.sink.add(jsonEncode(body));
             } catch (e) {
               print("error : " + e);
-            }
+            };
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => ChatScreen(
+                      chatname: name,
+                      receiverid: receiverid,
+                      designation: designation,
+                      department: department,
+                      gender: gender,
+                      classname: classname,
+                      division: division,
+                      profileimage: profile,
+                      canrespond: true,
+                    )),
+                    (Route<dynamic> route) => false);
           }),
     );
   }
