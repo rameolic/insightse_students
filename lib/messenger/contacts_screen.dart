@@ -220,6 +220,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                                   }
                                                   groupstatus = group;
                                                   is_bot = bot;
+                                                  attachmentfile=null;
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -492,6 +493,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                               }
                                               groupstatus = group;
                                               is_bot = bot;
+                                              attachmentfile=null;
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(

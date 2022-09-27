@@ -1375,7 +1375,7 @@ class AttachmentPreveiw extends StatelessWidget {
               p.extension(attachmentpath).toLowerCase() == ".png" ||
               p.extension(attachmentpath).toLowerCase() == ".eps")
               ? Image.file(File(attachmentpath))
-              : (p.extension(attachmentpath).toLowerCase() == ".mov" ||
+: (p.extension(attachmentpath).toLowerCase() == ".mov" ||
               p.extension(attachmentpath).toLowerCase() == ".mp4" ||
               p.extension(attachmentpath).toLowerCase() == ".mkv" ||
               p.extension(attachmentpath).toLowerCase() == ".hevc")
