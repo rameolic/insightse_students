@@ -120,8 +120,8 @@ addmessages(List<message> chatconversations, context) {
     if (chatconversations[i].senderid.toString() == messengerid.toString()) {
       if(!chatconversations[i].isdeleted){
         if ((chatconversations[i].attachment.toString() == "[null]" ||
-                chatconversations[i].attachment.toString() == "[]") &&
-            chatconversations[i].messagecontent.toString() != "") {
+            chatconversations[i].attachment.toString() == "[]") &&
+            chatconversations[i].messagecontent.toString() != "null") {
           data.messages.add(Row(
             children: [
               SizedBox(
@@ -152,14 +152,14 @@ addmessages(List<message> chatconversations, context) {
                                 ConstrainedBox(
                                   constraints: BoxConstraints(
                                       maxWidth:
-                                          MediaQuery.of(context).size.width /
-                                              1.5),
+                                      MediaQuery.of(context).size.width /
+                                          1.5),
                                   child: Padding(
                                     padding: const EdgeInsets.only(
                                         right: 0.0, bottom: 10.0),
                                     child: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                      CrossAxisAlignment.end,
                                       children: [
                                         // BubbleSpecialThree(
                                         //   text: chatconversations[i].messagecontent,
@@ -176,14 +176,14 @@ addmessages(List<message> chatconversations, context) {
                                                 topLeft: Radius.circular(10),
                                                 bottomLeft: Radius.circular(10),
                                                 bottomRight:
-                                                    Radius.circular(10)),
+                                                Radius.circular(10)),
                                             color: Colors.blueGrey,
                                           ),
                                           child: Column(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.end,
+                                            MainAxisAlignment.end,
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.end,
+                                            CrossAxisAlignment.end,
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Text(
@@ -241,14 +241,14 @@ addmessages(List<message> chatconversations, context) {
         } else if (chatconversations[i].attachment.toString() != "[null]" &&
             chatconversations[i].attachment.toString() != "[]") {
           for (int u = 0; u < chatconversations[i].attachment.length - 1; u++) {
-            if (p.extension(chatconversations[i].attachment[u]) == ".jpg" ||
-                p.extension(chatconversations[i].attachment[u]) == ".jpeg" ||
-                p.extension(chatconversations[i].attachment[u]) == ".tif" ||
-                p.extension(chatconversations[i].attachment[u]) == ".gif" ||
-                p.extension(chatconversations[i].attachment[u]) == ".tiff" ||
-                p.extension(chatconversations[i].attachment[u]) == ".bmp" ||
-                p.extension(chatconversations[i].attachment[u]) == ".png" ||
-                p.extension(chatconversations[i].attachment[u]) == ".eps") {
+            if (p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".jpg" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".jpeg" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".tif" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".gif" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".tiff" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".bmp" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".png" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".eps") {
               ///image from sender
               data.messages.add(Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -281,15 +281,15 @@ addmessages(List<message> chatconversations, context) {
                                     ConstrainedBox(
                                       constraints: BoxConstraints(
                                           maxWidth: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
+                                              .size
+                                              .width /
                                               1.5),
                                       child: Padding(
                                         padding: const EdgeInsets.only(
                                             right: 0.0, bottom: 10.0),
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.end,
+                                          CrossAxisAlignment.end,
                                           children: [
                                             GestureDetector(
                                               onTap: () {
@@ -300,10 +300,10 @@ addmessages(List<message> chatconversations, context) {
                                                       chatconversations[i]
                                                           .attachment[u],
                                                       loadingBuilder: (BuildContext
-                                                              context,
+                                                      context,
                                                           Widget child,
                                                           ImageChunkEvent
-                                                              loadingProgress) {
+                                                          loadingProgress) {
                                                         if (loadingProgress ==
                                                             null) return child;
                                                         return Center(
@@ -311,16 +311,16 @@ addmessages(List<message> chatconversations, context) {
                                                             height: 50,
                                                             width: 50,
                                                             child:
-                                                                CircularProgressIndicator(
+                                                            CircularProgressIndicator(
                                                               color:
-                                                                  borderyellow,
+                                                              borderyellow,
                                                               value: loadingProgress
-                                                                          .expectedTotalBytes !=
-                                                                      null
+                                                                  .expectedTotalBytes !=
+                                                                  null
                                                                   ? loadingProgress
-                                                                          .cumulativeBytesLoaded /
-                                                                      loadingProgress
-                                                                          .expectedTotalBytes
+                                                                  .cumulativeBytesLoaded /
+                                                                  loadingProgress
+                                                                      .expectedTotalBytes
                                                                   : null,
                                                             ),
                                                           ),
@@ -333,26 +333,26 @@ addmessages(List<message> chatconversations, context) {
                                               },
                                               child: Container(
                                                 margin:
-                                                    EdgeInsets.only(right: 10),
+                                                EdgeInsets.only(right: 10),
                                                 decoration: BoxDecoration(
                                                     border: Border.all(
                                                         color: Colors.blueGrey,
                                                         width: 2.0),
                                                     borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                12))),
+                                                    BorderRadius.all(
+                                                        Radius.circular(
+                                                            12))),
                                                 child: ConstrainedBox(
                                                   constraints: BoxConstraints(
                                                       maxHeight:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height /
-                                                              3),
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                          3),
                                                   child: ClipRRect(
                                                       borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
+                                                      BorderRadius.circular(
+                                                          12),
                                                       child: Image.network(
                                                         chatconversations[i]
                                                             .attachment[u],
@@ -397,15 +397,15 @@ addmessages(List<message> chatconversations, context) {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.end,
+                                              MainAxisAlignment.end,
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
+                                              CrossAxisAlignment.end,
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 Padding(
                                                   padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          8.0, 8.0, 20, 0),
+                                                  const EdgeInsets.fromLTRB(
+                                                      8.0, 8.0, 20, 0),
                                                   child: Text(
                                                     chatconversations[i].time,
                                                     softWrap: true,
@@ -429,11 +429,11 @@ addmessages(List<message> chatconversations, context) {
                   ),
                 ],
               ));
-            } else if (p.extension(chatconversations[i].attachment[u]) ==
-                    ".mp4" ||
-                p.extension(chatconversations[i].attachment[u]) == ".mov" ||
-                p.extension(chatconversations[i].attachment[u]) == ".mkv" ||
-                p.extension(chatconversations[i].attachment[u]) == ".hevc") {
+            } else if (p.extension(chatconversations[i].attachment[u]).toLowerCase() ==
+                ".mp4" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".mov" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".mkv" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".hevc") {
               VideoPlayerController _videoPlayerController1;
               ChewieController _chewieController;
 
@@ -482,36 +482,36 @@ addmessages(List<message> chatconversations, context) {
                                     ConstrainedBox(
                                       constraints: BoxConstraints(
                                           maxWidth: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
+                                              .size
+                                              .width /
                                               1.2),
                                       child: Padding(
                                         padding: const EdgeInsets.only(
                                             right: 0.0, bottom: 10.0),
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.end,
+                                          CrossAxisAlignment.end,
                                           children: [
                                             GestureDetector(
                                               onTap: () {},
                                               child: Container(
                                                 margin:
-                                                    EdgeInsets.only(left: 10),
+                                                EdgeInsets.only(left: 10),
                                                 decoration: BoxDecoration(
                                                     border: Border.all(
                                                         color: Colors.white,
                                                         width: 2.0),
                                                     borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                12))),
+                                                    BorderRadius.all(
+                                                        Radius.circular(
+                                                            12))),
                                                 child: ConstrainedBox(
                                                   constraints: BoxConstraints(
                                                     maxHeight:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height /
-                                                            4,
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                        4,
                                                     //   maxWidth: MediaQuery.of(
                                                     //       context)
                                                     //       .size
@@ -520,26 +520,26 @@ addmessages(List<message> chatconversations, context) {
                                                   ),
                                                   child: ClipRRect(
                                                       borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
+                                                      BorderRadius.circular(
+                                                          12),
                                                       child: Chewie(
                                                         controller:
-                                                            _chewieController,
+                                                        _chewieController,
                                                       )),
                                                 ),
                                               ),
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.end,
+                                              MainAxisAlignment.end,
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
+                                              CrossAxisAlignment.end,
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 Padding(
                                                   padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          8.0, 8.0, 0, 0),
+                                                  const EdgeInsets.fromLTRB(
+                                                      8.0, 8.0, 0, 0),
                                                   child: Text(
                                                     chatconversations[i].time,
                                                     softWrap: true,
@@ -607,15 +607,15 @@ addmessages(List<message> chatconversations, context) {
                                     ConstrainedBox(
                                       constraints: BoxConstraints(
                                           maxWidth: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
+                                              .size
+                                              .width /
                                               1.5),
                                       child: Padding(
                                         padding: const EdgeInsets.only(
                                             right: 0.0, bottom: 10.0),
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.end,
+                                          CrossAxisAlignment.end,
                                           children: [
                                             GestureDetector(
                                               onTap: () {
@@ -624,17 +624,17 @@ addmessages(List<message> chatconversations, context) {
                                                     MaterialPageRoute(
                                                         builder: (context) => WebveiwUI(
                                                             url: chatconversations[
-                                                                        i]
-                                                                    .attachment[
-                                                                u])));
+                                                            i]
+                                                                .attachment[
+                                                            u])));
                                               },
                                               child: ConstrainedBox(
                                                 constraints: BoxConstraints(
                                                     maxWidth:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width /
-                                                            1.5),
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                        1.5),
                                                 child: Container(
                                                   margin: EdgeInsets.only(
                                                       left: 10, right: 10),
@@ -645,9 +645,9 @@ addmessages(List<message> chatconversations, context) {
                                                           color: Colors.white24,
                                                           width: 2.0),
                                                       borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  10))),
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              10))),
                                                   child: Row(
                                                     children: [
                                                       Icon(
@@ -659,16 +659,16 @@ addmessages(List<message> chatconversations, context) {
                                                       ),
                                                       Flexible(
                                                           child: Text(
-                                                        (chatconversations[i]
-                                                            .attachment[u]
-                                                            .split('/')
-                                                            .last),
-                                                        softWrap: true,
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                        ),
-                                                        maxLines: 3,
-                                                      ))
+                                                            (chatconversations[i]
+                                                                .attachment[u]
+                                                                .split('/')
+                                                                .last),
+                                                            softWrap: true,
+                                                            style: TextStyle(
+                                                              color: Colors.white,
+                                                            ),
+                                                            maxLines: 3,
+                                                          ))
                                                     ],
                                                   ),
                                                 ),
@@ -676,15 +676,15 @@ addmessages(List<message> chatconversations, context) {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.end,
+                                              MainAxisAlignment.end,
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
+                                              CrossAxisAlignment.end,
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 Padding(
                                                   padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          8.0, 8.0, 18, 0),
+                                                  const EdgeInsets.fromLTRB(
+                                                      8.0, 8.0, 18, 0),
                                                   child: Text(
                                                     chatconversations[i].time,
                                                     softWrap: true,
@@ -725,75 +725,75 @@ addmessages(List<message> chatconversations, context) {
         }
       }else{
         data.messages.add(
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width/1.3,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      right: 0.0, bottom: 10.0),
-                  child: Column(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.end,
-                    children: [
-                      // BubbleSpecialThree(
-                      //   text: chatconversations[i].messagecontent,
-                      //   color: Colors.blueGrey,
-                      //   tail: true,
-                      //   textStyle:
-                      //   TextStyle(color: Colors.white, fontSize: 16),
-                      // ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        margin: EdgeInsets.only(right: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight:
-                              Radius.circular(10)),
-                          color: Colors.grey.withOpacity(0.2),
-                        ),
-                        child: Column(
-                          mainAxisAlignment:
-                          MainAxisAlignment.center,
-                          crossAxisAlignment:
-                          CrossAxisAlignment.end,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Icon(Icons.lock_clock,color: Colors.grey,size: 20,),
-                                SizedBox(width: 10,),
-                                Flexible(
-                                  child : Text("This message has been deleted.",
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 15),
-                                    softWrap: true,
-                                    maxLines: null,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width/1.3,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        right: 0.0, bottom: 10.0),
+                    child: Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.end,
+                      children: [
+                        // BubbleSpecialThree(
+                        //   text: chatconversations[i].messagecontent,
+                        //   color: Colors.blueGrey,
+                        //   tail: true,
+                        //   textStyle:
+                        //   TextStyle(color: Colors.white, fontSize: 16),
+                        // ),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          margin: EdgeInsets.only(right: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight:
+                                Radius.circular(10)),
+                            color: Colors.grey.withOpacity(0.2),
+                          ),
+                          child: Column(
+                            mainAxisAlignment:
+                            MainAxisAlignment.center,
+                            crossAxisAlignment:
+                            CrossAxisAlignment.end,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Icon(Icons.lock_clock,color: Colors.grey,size: 20,),
+                                  SizedBox(width: 10,),
+                                  Flexible(
+                                    child : Text("This message has been deleted.",
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 15),
+                                      softWrap: true,
+                                      maxLines: null,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          )
+              ],
+            )
         );
       }
     } else {
       if(!chatconversations[i].isdeleted){
         if ((chatconversations[i].attachment.toString() == "[null]" ||
-                chatconversations[i].attachment.toString() == "[]") &&
-            chatconversations[i].messagecontent.toString() != "") {
+            chatconversations[i].attachment.toString() == "[]") &&
+            chatconversations[i].messagecontent.toString() != "null") {
           data.messages.add(Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -860,10 +860,10 @@ addmessages(List<message> chatconversations, context) {
                                     chatconversations[i]
                                         .messagecontent
                                         .substring(
-                                            0,
-                                            chatconversations[i]
-                                                .messagecontent
-                                                .indexOf("<br>")),
+                                        0,
+                                        chatconversations[i]
+                                            .messagecontent
+                                            .indexOf("<br>")),
                                     style: TextStyle(
                                         color: primarycolor,
                                         fontWeight: FontWeight.bold),
@@ -881,13 +881,13 @@ addmessages(List<message> chatconversations, context) {
                                     chatconversations[i]
                                         .messagecontent
                                         .substring(
-                                            chatconversations[i]
-                                                    .messagecontent
-                                                    .indexOf("<br>") +
-                                                4,
-                                            chatconversations[i]
-                                                .messagecontent
-                                                .length)
+                                        chatconversations[i]
+                                            .messagecontent
+                                            .indexOf("<br>") +
+                                            4,
+                                        chatconversations[i]
+                                            .messagecontent
+                                            .length)
                                         .replaceAll("<p>", "")
                                         .replaceAll("</p>", "\n"),
                                     softWrap: true,
@@ -932,14 +932,14 @@ addmessages(List<message> chatconversations, context) {
         } else if (chatconversations[i].attachment.toString() != "[null]" &&
             chatconversations[i].attachment.toString() != "[]") {
           for (int u = 0; u < chatconversations[i].attachment.length - 1; u++) {
-            if (p.extension(chatconversations[i].attachment[u]) == ".jpg" ||
-                p.extension(chatconversations[i].attachment[u]) == ".jpeg" ||
-                p.extension(chatconversations[i].attachment[u]) == ".tif" ||
-                p.extension(chatconversations[i].attachment[u]) == ".gif" ||
-                p.extension(chatconversations[i].attachment[u]) == ".tiff" ||
-                p.extension(chatconversations[i].attachment[u]) == ".bmp" ||
-                p.extension(chatconversations[i].attachment[u]) == ".png" ||
-                p.extension(chatconversations[i].attachment[u]) == ".eps") {
+            if (p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".jpg" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".jpeg" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".tif" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".gif" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".tiff" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".bmp" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".png" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".eps") {
               ///image from receiver
               data.messages.add(Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -985,11 +985,11 @@ addmessages(List<message> chatconversations, context) {
                                   border: Border.all(
                                       color: Colors.white, width: 2.0),
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(12))),
+                                  BorderRadius.all(Radius.circular(12))),
                               child: ConstrainedBox(
                                 constraints: BoxConstraints(
                                     maxHeight:
-                                        MediaQuery.of(context).size.height / 3),
+                                    MediaQuery.of(context).size.height / 3),
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(12),
                                     child: Image.network(
@@ -1003,7 +1003,7 @@ addmessages(List<message> chatconversations, context) {
                             children: [
                               Padding(
                                 padding:
-                                    const EdgeInsets.fromLTRB(8.0, 8.0, 0, 0),
+                                const EdgeInsets.fromLTRB(8.0, 8.0, 0, 0),
                                 child: Text(
                                   chatconversations[i].time,
                                   softWrap: true,
@@ -1031,11 +1031,11 @@ addmessages(List<message> chatconversations, context) {
                   ),
                 ],
               ));
-            } else if (p.extension(chatconversations[i].attachment[u]) ==
-                    ".mp4" ||
-                p.extension(chatconversations[i].attachment[u]) == ".mov" ||
-                p.extension(chatconversations[i].attachment[u]) == ".mkv" ||
-                p.extension(chatconversations[i].attachment[u]) == ".hevc") {
+            } else if (p.extension(chatconversations[i].attachment[u]).toLowerCase() ==
+                ".mp4" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".mov" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".mkv" ||
+                p.extension(chatconversations[i].attachment[u]).toLowerCase() == ".hevc") {
               VideoPlayerController _videoPlayerController1;
               ChewieController _chewieController;
 
@@ -1067,7 +1067,7 @@ addmessages(List<message> chatconversations, context) {
                             maxWidth: MediaQuery.of(context).size.width / 1.2),
                         child: Padding(
                           padding:
-                              const EdgeInsets.only(right: 0.0, bottom: 10.0),
+                          const EdgeInsets.only(right: 0.0, bottom: 10.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -1092,11 +1092,11 @@ addmessages(List<message> chatconversations, context) {
                                     border: Border.all(
                                         color: Colors.white, width: 2.0),
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(12))),
+                                    BorderRadius.all(Radius.circular(12))),
                                 child: ConstrainedBox(
                                   constraints: BoxConstraints(
                                     maxHeight:
-                                        MediaQuery.of(context).size.height / 4,
+                                    MediaQuery.of(context).size.height / 4,
                                     //   maxWidth: MediaQuery.of(
                                     //       context)
                                     //       .size
@@ -1158,7 +1158,7 @@ addmessages(List<message> chatconversations, context) {
                             child: ConstrainedBox(
                               constraints: BoxConstraints(
                                   maxWidth:
-                                      MediaQuery.of(context).size.width / 1.5),
+                                  MediaQuery.of(context).size.width / 1.5),
                               child: Container(
                                 margin: EdgeInsets.only(left: 10, right: 10),
                                 padding: EdgeInsets.all(10),
@@ -1196,22 +1196,22 @@ addmessages(List<message> chatconversations, context) {
                                         ),
                                         Flexible(
                                             child: Text(
-                                          (chatconversations[i]
-                                              .attachment[u]
-                                              .split('/')
-                                              .last),
-                                          softWrap: true,
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                          ),
-                                          maxLines: 3,
-                                        ))
+                                              (chatconversations[i]
+                                                  .attachment[u]
+                                                  .split('/')
+                                                  .last),
+                                              softWrap: true,
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                              ),
+                                              maxLines: 3,
+                                            ))
                                       ],
                                     ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                      CrossAxisAlignment.end,
                                       //  mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Padding(
@@ -1332,10 +1332,10 @@ class AttachmentPreveiw extends StatelessWidget {
   ChewieController _chewieController;
   @override
   Widget build(BuildContext context) {
-    if (p.extension(attachmentpath) == ".mov" ||
-        p.extension(attachmentpath) == ".mp4" ||
-        p.extension(attachmentpath) == ".mp4" ||
-        p.extension(attachmentpath) == ".hevc") {
+    if (p.extension(attachmentpath).toLowerCase() == ".mov" ||
+        p.extension(attachmentpath).toLowerCase() == ".mp4" ||
+        p.extension(attachmentpath).toLowerCase() == ".mkv" ||
+        p.extension(attachmentpath).toLowerCase() == ".hevc") {
       VideoPlayerController _videoPlayerController1;
       _videoPlayerController1 = VideoPlayerController.file(
         File(attachmentpath),
@@ -1366,23 +1366,29 @@ class AttachmentPreveiw extends StatelessWidget {
       ),
       backgroundColor: Colors.black,
       body: Center(
-          child: (p.extension(attachmentpath) == ".jpg" ||
-                  p.extension(attachmentpath) == ".jpeg" ||
-                  p.extension(attachmentpath) == ".tif" ||
-                  p.extension(attachmentpath) == ".gif" ||
-                  p.extension(attachmentpath) == ".tiff" ||
-                  p.extension(attachmentpath) == ".bmp" ||
-                  p.extension(attachmentpath) == ".png" ||
-                  p.extension(attachmentpath) == ".eps")
+          child: (p.extension(attachmentpath).toLowerCase() == ".jpg" ||
+              p.extension(attachmentpath).toLowerCase() == ".jpeg" ||
+              p.extension(attachmentpath).toLowerCase() == ".tif" ||
+              p.extension(attachmentpath).toLowerCase() == ".gif" ||
+              p.extension(attachmentpath).toLowerCase() == ".tiff" ||
+              p.extension(attachmentpath).toLowerCase() == ".bmp" ||
+              p.extension(attachmentpath).toLowerCase() == ".png" ||
+              p.extension(attachmentpath).toLowerCase() == ".eps")
               ? Image.file(File(attachmentpath))
-              : (p.extension(attachmentpath) == ".mov" ||
-                      p.extension(attachmentpath) == ".mp4" ||
-                      p.extension(attachmentpath) == ".mkv" ||
-                      p.extension(attachmentpath) == ".hevc")
-                  ? Chewie(
-                      controller: _chewieController,
-                    )
-                  : PDF().fromPath(attachmentpath)),
+              : (p.extension(attachmentpath).toLowerCase() == ".mov" ||
+              p.extension(attachmentpath).toLowerCase() == ".mp4" ||
+              p.extension(attachmentpath).toLowerCase() == ".mkv" ||
+              p.extension(attachmentpath).toLowerCase() == ".hevc")
+              ? Chewie(
+            controller: _chewieController,
+          )
+          //         :
+          // (p.extension(attachmentpath) == ".mp3")
+          //     ? Chewie(
+          //   controller: _chewieController,
+          // )
+              :
+          PDF().fromPath(attachmentpath)),
       floatingActionButton: FloatingActionButton(
           elevation: 3.0,
           child: new Icon(
@@ -1392,20 +1398,6 @@ class AttachmentPreveiw extends StatelessWidget {
           backgroundColor: borderyellow,
           onPressed: () async {
             attachmentfile = File(attachmentpath);
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                    builder: (context) => ChatScreen(
-                          chatname: name,
-                          receiverid: receiverid,
-                          designation: designation,
-                          department: department,
-                          gender: gender,
-                          classname: classname,
-                          division: division,
-                          profileimage: profile,
-                          canrespond: true,
-                        )),
-                (Route<dynamic> route) => false);
             String link = await getattachmenturl(attachmentpath);
             print("link : " + link);
             Map body = {
@@ -1421,7 +1413,21 @@ class AttachmentPreveiw extends StatelessWidget {
               channel.sink.add(jsonEncode(body));
             } catch (e) {
               print("error : " + e);
-            }
+            };
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => ChatScreen(
+                      chatname: name,
+                      receiverid: receiverid,
+                      designation: designation,
+                      department: department,
+                      gender: gender,
+                      classname: classname,
+                      division: division,
+                      profileimage: profile,
+                      canrespond: true,
+                    )),
+                    (Route<dynamic> route) => false);
           }),
     );
   }
