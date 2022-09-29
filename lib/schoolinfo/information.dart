@@ -431,12 +431,18 @@ class InformationTab extends StatelessWidget {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 10),
-                                      child: Text(
-                                        data.website,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 16,
-                                            color: Colors.black),
+                                      child: SizedBox(
+                                        width: MediaQuery.of(context).size.width/1.4,
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Text(
+                                            data.website,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 16,
+                                                color: Colors.black),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],
