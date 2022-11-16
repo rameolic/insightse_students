@@ -4,14 +4,15 @@ import 'splashscreen.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'loginScren.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'pushnotification.dart';
 import 'firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'moduleapi.dart';
 import 'eventcalendar/calendarapi.dart';
 import 'newdashboardui.dart';
 import 'messenger/api.dart';
+import 'Switchaccounts/switchaccountsdata.dart';
 const debug = true;
 bool newuser;
 void main() async{
@@ -23,6 +24,8 @@ void main() async{
    logindata = await SharedPreferences.getInstance();
   newuser = await (logindata.getBool('login') ?? true);
   if (newuser == false) {
+    print("main file");
+    Addaccounts("","","","",false,"","","");
     await initial();
     await getunreadcount();
     getcalendarevents(inputbody);

@@ -3,6 +3,7 @@ import 'moduleapi.dart';
 import 'careertests/careertestdashbord.dart';
 import 'dart:convert';
 import 'package:flushbar/flushbar.dart';
+import 'Switchaccounts/switchaccountsdata.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../circulars/circularhome.dart';
 import 'api/unreadtitlesapi.dart';
@@ -24,7 +25,7 @@ import 'messenger/contacts_screen.dart';
 import 'schoolinfo/schoolapis.dart';
 import 'package:badges/badges.dart';
 import 'online_classes/onlineUIupdated.dart';
-import 'messenger/api.dart';
+import 'Switchaccounts/SwitchaccountUI.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -33,6 +34,7 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
+
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
@@ -41,6 +43,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     //slidersdata(usernamedata, password, deviceid);
   }
+
   // Future<void> slidersdata(
   //     String usernamedata, String password, String deviceid) async {
   //   Map<String, String> headers = {
@@ -264,22 +267,42 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.symmetric(),
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(left: 10.0, top: 15),
-                child: Text(
-                  org_name,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                padding: const EdgeInsets.only(left: 10.0, top: 15, right: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      org_name,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SwitchAccounts()),
+                        );
+                      },
+                      child: CircleAvatar(
+                        radius: 18,
+                        backgroundColor: borderyellow,
+                        backgroundImage: NetworkImage(Logindata.image),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Container(
                 child: sliders.isEmpty
                     ? SizedBox(
-                      height:
-                      MediaQuery.of(context).size.height * 0.30,
-                      child: Center(
-                          child: new Image(
-                        image: new AssetImage("assets/volume-colorful.gif"),
-                      )),
-                    )
+                        height: MediaQuery.of(context).size.height * 0.30,
+                        child: Center(
+                            child: new Image(
+                          image: new AssetImage("assets/volume-colorful.gif"),
+                        )),
+                      )
                     : sliders.length > 0
                         ? CarouselSlider(
                             items: <Widget>[
@@ -325,7 +348,7 @@ class _HomePageState extends State<HomePage> {
               //   ),
               // ),
               Padding(
-                padding: const EdgeInsets.only(top:10.0),
+                padding: const EdgeInsets.only(top: 10.0),
                 child: Wrap(
                   alignment: WrapAlignment.spaceEvenly,
                   children: [
@@ -350,37 +373,39 @@ class _HomePageState extends State<HomePage> {
                       child: _buildWikiCategory(Icons.person_outline, "Profile",
                           secondarycolor.withOpacity(0.7)),
                     ),
-                    if(module.Carrer_test)
+                    if (module.Carrer_test)
+                      GestureDetector(
+                        onTap: () async {
+                          //  await sendnotification("ram", "logotest");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CareerTestDashBord()),
+                          );
+                        },
+                        child: _buildWikiCategory(
+                            CupertinoIcons.doc,
+                            "Skill Assessment",
+                            secondarycolor.withOpacity(0.7)),
+                      ),
+                    if (module.Schoolinfo)
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SchoolInfoDb()),
+                          );
+                        },
+                        child: _buildWikiCategory(Icons.apartment_rounded,
+                            "School Info", secondarycolor.withOpacity(0.7)),
+                      ),
                     GestureDetector(
-                      onTap: ()async {
-                      //  await sendnotification("ram", "logotest");
+                      onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CareerTestDashBord()),
-                        );
-                      },
-                      child: _buildWikiCategory(CupertinoIcons.doc,
-                          "Skill Assessment", secondarycolor.withOpacity(0.7)),
-                    ),
-                    if(module.Schoolinfo)
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SchoolInfoDb(
-                          )),
-                        );
-                      },
-                      child: _buildWikiCategory(Icons.apartment_rounded,
-                          "School Info", secondarycolor.withOpacity(0.7)),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => NewOnlineClassUi(
-                          )),
+                              builder: (context) => NewOnlineClassUi()),
                         );
                       },
                       child: _buildWikiCategory(Icons.online_prediction_rounded,
@@ -412,201 +437,224 @@ class _HomePageState extends State<HomePage> {
                     //               ,));
                     //       }
                     //     }),
-                    if(module.Fee_management)
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => FeeMangement()),
-                        );
-                        // Flushbar(
-                        //   message: "Fee Management coming soon..",
-                        //   icon: const Icon(
-                        //     Icons.info_outline,
-                        //     size: 20.0,
-                        //     color: secondarycolor,
-                        //   ),
-                        //   duration: const Duration(seconds: 4),
-                        //   leftBarIndicatorColor: secondarycolor,
-                        // ).show(context);
-                      },
-                      child: _buildWikiCategory(Icons.credit_card,
-                          "Fee management", secondarycolor.withOpacity(0.7)),
-                    ),
-                    if(module.Report_card)
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ReportCard()),
-                        );
-                      },
-                      child:  Badge(
-    badgeColor: Colors.red[900],
-    toAnimate: true,
-    showBadge: newdata.reportcardcount == "0" ? false:true,
-    badgeContent: Text(newdata.reportcardcount,style: TextStyle(color: Colors.white),),
-                        child: _buildWikiCategory(CupertinoIcons.doc_richtext,
-                            "Report card", secondarycolor.withOpacity(0.7)),
+                    if (module.Fee_management)
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FeeMangement()),
+                          );
+                          // Flushbar(
+                          //   message: "Fee Management coming soon..",
+                          //   icon: const Icon(
+                          //     Icons.info_outline,
+                          //     size: 20.0,
+                          //     color: secondarycolor,
+                          //   ),
+                          //   duration: const Duration(seconds: 4),
+                          //   leftBarIndicatorColor: secondarycolor,
+                          // ).show(context);
+                        },
+                        child: _buildWikiCategory(Icons.credit_card,
+                            "Fee management", secondarycolor.withOpacity(0.7)),
                       ),
-                    ),
-                    if(module.CIRCULARS)
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => CircularHome()),
-                        );
-                      },
-                      child:  Badge(
-                        badgeColor: Colors.red[900],
-                        toAnimate: true,
-                        showBadge: int.parse(newdata.circularscount) == 0 ? false:true,
-                        badgeContent: Text(newdata.circularscount,style: TextStyle(color: Colors.white),),
-                        child: _buildWikiCategory(SimpleLineIcons.screen_tablet,
-                            "Circulars", secondarycolor.withOpacity(0.7)),
-                      ),
-                    ),
-                    if(module.transportation)
-                    GestureDetector(
-                      onTap: () {
-                        Flushbar(
-                          message: "Transportation coming soon..",
-                          icon: const Icon(
-                            Icons.info_outline,
-                            size: 20.0,
-                            color: secondarycolor,
+                    if (module.Report_card)
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ReportCard()),
+                          );
+                        },
+                        child: Badge(
+                          badgeColor: Colors.red[900],
+                          toAnimate: true,
+                          showBadge:
+                              newdata.reportcardcount == "0" ? false : true,
+                          badgeContent: Text(
+                            newdata.reportcardcount,
+                            style: TextStyle(color: Colors.white),
                           ),
-                          duration: const Duration(seconds: 4),
-                          leftBarIndicatorColor: secondarycolor,
-                        ).show(context);
-                      },
-                      child: _buildWikiCategory(CupertinoIcons.bus,
-                          "Transportation", secondarycolor.withOpacity(0.7)),
-                    ),
+                          child: _buildWikiCategory(CupertinoIcons.doc_richtext,
+                              "Report card", secondarycolor.withOpacity(0.7)),
+                        ),
+                      ),
+                    if (module.CIRCULARS)
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CircularHome()),
+                          );
+                        },
+                        child: Badge(
+                          badgeColor: Colors.red[900],
+                          toAnimate: true,
+                          showBadge: int.parse(newdata.circularscount) == 0
+                              ? false
+                              : true,
+                          badgeContent: Text(
+                            newdata.circularscount,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          child: _buildWikiCategory(
+                              SimpleLineIcons.screen_tablet,
+                              "Circulars",
+                              secondarycolor.withOpacity(0.7)),
+                        ),
+                      ),
+                    if (module.transportation)
+                      GestureDetector(
+                        onTap: () {
+                          Flushbar(
+                            message: "Transportation coming soon..",
+                            icon: const Icon(
+                              Icons.info_outline,
+                              size: 20.0,
+                              color: secondarycolor,
+                            ),
+                            duration: const Duration(seconds: 4),
+                            leftBarIndicatorColor: secondarycolor,
+                          ).show(context);
+                        },
+                        child: _buildWikiCategory(CupertinoIcons.bus,
+                            "Transportation", secondarycolor.withOpacity(0.7)),
+                      ),
 
-                    if(module.cafeteria)
-                    GestureDetector(
-                      onTap: () {
-                        Flushbar(
-                          message: "Cafeteria coming soon..",
-                          icon: const Icon(
-                            Icons.info_outline,
-                            size: 20.0,
-                            color: secondarycolor,
-                          ),
-                          duration: const Duration(seconds: 4),
-                          leftBarIndicatorColor: secondarycolor,
-                        ).show(context);
-                      },
-                      child: _buildWikiCategory(Icons.local_cafe_outlined,
-                          "Cafeteria", secondarycolor.withOpacity(0.7)),
-                    ),
+                    if (module.cafeteria)
+                      GestureDetector(
+                        onTap: () {
+                          Flushbar(
+                            message: "Cafeteria coming soon..",
+                            icon: const Icon(
+                              Icons.info_outline,
+                              size: 20.0,
+                              color: secondarycolor,
+                            ),
+                            duration: const Duration(seconds: 4),
+                            leftBarIndicatorColor: secondarycolor,
+                          ).show(context);
+                        },
+                        child: _buildWikiCategory(Icons.local_cafe_outlined,
+                            "Cafeteria", secondarycolor.withOpacity(0.7)),
+                      ),
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  print("tapped");
-                  showDialog(
-                      context: context,
-                      builder: (_) =>
-                          StatefulBuilder(builder: (context, setState) {
-                            return AlertDialog(
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0))),
-                              content: Builder(
-                                builder: (context) {
-                                  // Get available height and width of the build area of this widget. Make a choice depending on the size.
-                                  return Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        'Alert',
-                                        style: TextStyle(
-                                            color: secondarycolor,
-                                            fontSize: 20),
-                                      ),
-                                      Divider(
-                                        color: Colors.black,
-                                        thickness: 0.8,
-                                      ),
-                                      Text(
-                                        "Are you sure you want to logout",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () async {
-                                              var data =  await SharedPreferences.getInstance();
-                                              data.clear();
-                                              await Logoutapi();
-                                              await Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                                              SignIn()), (Route<dynamic> route) => false);
-                                            },
-                                            child: Container(
-                                              height: 30,
-                                              width: 80,
-                                              decoration: BoxDecoration(
-                                                color: Colors.red,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Center(
-                                                  child: Text('Logout',
-                                                      style: TextStyle(
-                                                          color: Colors.white))),
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: (){
-                                              Navigator.pop(context);
-                                            },
-                                            child: Container(
-                                              height: 30,
-                                              width: 80,
-                                              decoration: BoxDecoration(
-                                                color: grey,
-                                                borderRadius:
-                                                BorderRadius.circular(5),
-                                              ),
-                                              child: Center(
-                                                  child: Text('cancel',
-                                                      style: TextStyle(
-                                                          color: Colors.white))),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            );
-                          }));
-                },
-                child: Container(
-                  margin: EdgeInsets.only(left: 12, right: 12, top: 10),
-                  decoration: BoxDecoration(
-                    color: grey.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  height: 45,
-                  child: Center(
-                      child: Text(
-                    "Log out",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
-                  )),
-                ),
-              )
+              // GestureDetector(
+              //   onTap: () {
+              //     print("tapped");
+              //     showDialog(
+              //         context: context,
+              //         builder: (_) =>
+              //             StatefulBuilder(builder: (context, setState) {
+              //               return AlertDialog(
+              //                 backgroundColor: Colors.white,
+              //                 shape: RoundedRectangleBorder(
+              //                     borderRadius:
+              //                         BorderRadius.all(Radius.circular(10.0))),
+              //                 content: Builder(
+              //                   builder: (context) {
+              //                     // Get available height and width of the build area of this widget. Make a choice depending on the size.
+              //                     return Column(
+              //                       mainAxisSize: MainAxisSize.min,
+              //                       children: [
+              //                         Text(
+              //                           'Alert',
+              //                           style: TextStyle(
+              //                               color: secondarycolor,
+              //                               fontSize: 20),
+              //                         ),
+              //                         Divider(
+              //                           color: Colors.black,
+              //                           thickness: 0.8,
+              //                         ),
+              //                         Text(
+              //                           "Are you sure you want to logout",
+              //                           textAlign: TextAlign.center,
+              //                           style: TextStyle(fontSize: 14),
+              //                         ),
+              //                         SizedBox(
+              //                           height: 10,
+              //                         ),
+              //                         Row(
+              //                           mainAxisAlignment:
+              //                               MainAxisAlignment.spaceEvenly,
+              //                           children: [
+              //                             GestureDetector(
+              //                               onTap: () async {
+              //                                 // Addaccounts("ram","password");
+              //                                 //  var data =  await SharedPreferences.getInstance();
+              //                                 //  data.clear();
+              //                                 await Logoutapi();
+              //                                 await Navigator.of(context)
+              //                                     .pushAndRemoveUntil(
+              //                                         MaterialPageRoute(
+              //                                             builder: (context) =>
+              //                                                 SignIn()),
+              //                                         (Route<dynamic> route) =>
+              //                                             false);
+              //                               },
+              //                               child: Container(
+              //                                 height: 30,
+              //                                 width: 80,
+              //                                 decoration: BoxDecoration(
+              //                                   color: Colors.red,
+              //                                   borderRadius:
+              //                                       BorderRadius.circular(5),
+              //                                 ),
+              //                                 child: Center(
+              //                                     child: Text('Logout',
+              //                                         style: TextStyle(
+              //                                             color:
+              //                                                 Colors.white))),
+              //                               ),
+              //                             ),
+              //                             GestureDetector(
+              //                               onTap: () {
+              //                                 Navigator.pop(context);
+              //                               },
+              //                               child: Container(
+              //                                 height: 30,
+              //                                 width: 80,
+              //                                 decoration: BoxDecoration(
+              //                                   color: grey,
+              //                                   borderRadius:
+              //                                       BorderRadius.circular(5),
+              //                                 ),
+              //                                 child: Center(
+              //                                     child: Text('cancel',
+              //                                         style: TextStyle(
+              //                                             color:
+              //                                                 Colors.white))),
+              //                               ),
+              //                             ),
+              //                           ],
+              //                         ),
+              //                       ],
+              //                     );
+              //                   },
+              //                 ),
+              //               );
+              //             }));
+              //   },
+              //   child: Container(
+              //     margin: EdgeInsets.only(left: 12, right: 12, top: 10),
+              //     decoration: BoxDecoration(
+              //       color: grey.withOpacity(0.5),
+              //       borderRadius: BorderRadius.circular(10),
+              //     ),
+              //     height: 45,
+              //     child: Center(
+              //         child: Text(
+              //       "Log out",
+              //       style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+              //     )),
+              //   ),
+              // )
             ],
           ),
         ),
@@ -841,7 +889,7 @@ class Loading extends StatelessWidget {
           },
           child: Icon(Icons.arrow_back_ios_sharp, color: secondarycolor),
         ),
-        title:  Text(
+        title: Text(
           title,
           style: TextStyle(color: secondarycolor),
         ),

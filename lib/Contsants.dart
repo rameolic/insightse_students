@@ -166,6 +166,7 @@ void initial() async {
   Logindata.fixedurl = fixedurl;
   Logindata.orgname = org_name;
   Logindata.branchname = logindata.getString('branch');
+  print("username is here: ${Logindata.username}");
   await GetLmsData(forthedate);
   await getunreadtitles();
 }

@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:flushbar/flushbar.dart';
 import 'messagesui.dart';
 
-String messengerid = Logindata.parentid.toString() == "null" ?Logindata.userid:Logindata.parentid;
+//String messengerid = current_userid;
 String attachmentsettings;
 
 class converstionlist {
@@ -74,7 +74,7 @@ Future<bool> getconversations() async {
     "org_id": Logindata.orgid,
     "batch_id": Logindata.batchid,
     "stud_mid": Logindata.master_id,
-    "iduser": messengerid,
+    "iduser": current_userid,
     "search": ""
   });
   print(jsonEncode(body));
@@ -84,7 +84,7 @@ Future<bool> getconversations() async {
         Uri.parse(baseurl + "messenger/student_contact"),
         headers: headers,
         body: body);
-    print("conversations: ${response.body}");
+    print("conversations: ${response.body} + ${response.statusCode}");
     if (response.statusCode == 200) {
       conversations = [];
       var decodeddata = jsonDecode(response.body);
@@ -163,7 +163,7 @@ Future<bool> usesearch(keyword, context) async {
     "org_id": Logindata.orgid,
     "batch_id": Logindata.batchid,
     "stud_mid": Logindata.master_id,
-    "iduser": messengerid,
+    "iduser": current_userid,
     "search": keyword
   });
 
@@ -295,7 +295,7 @@ Future<bool> getmessages(receiverid,skip, context) async {
     'Bearer ${Logindata.usertoken}' + '_ie_' + '${Logindata.userid}'
   };
   final body = jsonEncode(<String, String>{
-    "sender_id": messengerid,
+    "sender_id": current_userid,
     "receiver_id": receiverid,
     "skip": skip
   });
@@ -314,31 +314,31 @@ Future<bool> getmessages(receiverid,skip, context) async {
       data.messages=[];
     }
       for (int i = 0; i < decodeddata['data'].length; i++) {
-          if(decodeddata['data'].length.toString() == "10"){
-            showmore = true;
-          }else{
-            showmore = false;
-          }
-          String date;
-
-          try{
-            date = DateFormat("h:mma")
-                .format(DateTime.parse("${decodeddata['data'][i]['time']}"));
-      }catch(e){
-           date = "${decodeddata['data'][i]['time']}";
-          }
-          chatconversations.add(message(
-              id: decodeddata['data'][i]['_id']['\$oid'].toString(),
-              time:date,
-              senderid: decodeddata['data'][i]['sender_message_id'].toString(),
-              receiverid:
-              decodeddata['data'][i]['receiver_message_id'].toString(),
-              messagecontent: decodeddata['data'][i]['message'].toString(),
-              attachment:
-              decodeddata['data'][i]['attachment'].toString().split("<,>"),
-              sendername: decodeddata['data'][i]['sender_name'].toString(),
-              isdeleted: decodeddata['data'][i]['is_delete'] == 1 ? true:false,
-              readstatus: decodeddata['data'][i]['read_status'].toString()));
+        if (decodeddata['data'].length.toString() == "10") {
+          showmore = true;
+        } else {
+          showmore = false;
+        }
+        String date;
+        //     try{
+        //       date = DateFormat.yMd().add_jm().format(DateTime.parse("${decodeddata['data'][i]['time']}"));
+        // }catch(e){
+        date = "${decodeddata['data'][i]['time']}";
+        //  }
+        if(decodeddata['data'][i]['message'].toString()!="null"){
+        chatconversations.add(message(
+            id: decodeddata['data'][i]['_id']['\$oid'].toString(),
+            time: date,
+            senderid: decodeddata['data'][i]['sender_message_id'].toString(),
+            receiverid:
+                decodeddata['data'][i]['receiver_message_id'].toString(),
+            messagecontent: decodeddata['data'][i]['message'].toString(),
+            attachment:
+                decodeddata['data'][i]['attachment'].toString().split("<,>"),
+            sendername: decodeddata['data'][i]['sender_name'].toString(),
+            isdeleted: decodeddata['data'][i]['is_delete'] == 1 ? true : false,
+            readstatus: decodeddata['data'][i]['read_status'].toString()));
+      }
     }
 
     return true;
@@ -393,7 +393,7 @@ Future<bool> deletemessages(String messageid) async {
   };
   final body = jsonEncode(<String, String>
   {
-    "member_uid": messengerid,
+    "member_uid": current_userid,
     "object_id":"$messageid"
   }
   );
