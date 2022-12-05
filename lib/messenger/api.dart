@@ -7,9 +7,9 @@ import 'package:intl/intl.dart';
 import 'package:flushbar/flushbar.dart';
 import 'messagesui.dart';
 
-String messengerid = Logindata.parentid.toString() == "null" ?Logindata.userid:Logindata.parentid;
+//String messengerid = current_userid;
 String attachmentsettings;
-
+String lastdate;
 class converstionlist {
   String fullname,
       department,
@@ -74,7 +74,7 @@ Future<bool> getconversations() async {
     "org_id": Logindata.orgid,
     "batch_id": Logindata.batchid,
     "stud_mid": Logindata.master_id,
-    "iduser": messengerid,
+    "iduser": current_userid,
     "search": ""
   });
   print(jsonEncode(body));
@@ -84,7 +84,7 @@ Future<bool> getconversations() async {
         Uri.parse(baseurl + "messenger/student_contact"),
         headers: headers,
         body: body);
-    print("conversations: ${response.body}");
+    print("conversations: ${response.body} + ${response.statusCode}");
     if (response.statusCode == 200) {
       conversations = [];
       var decodeddata = jsonDecode(response.body);
@@ -163,7 +163,7 @@ Future<bool> usesearch(keyword, context) async {
     "org_id": Logindata.orgid,
     "batch_id": Logindata.batchid,
     "stud_mid": Logindata.master_id,
-    "iduser": messengerid,
+    "iduser": current_userid,
     "search": keyword
   });
 
@@ -286,82 +286,74 @@ class message {
       });
 }
 List<message>chatconversations=[];
-List<message>tempmessages=[];
-
+bool currentusing = false;
 Future<bool> getmessages(receiverid,skip, context) async {
-  Map<String, String> headers = {
-    'Content-Type': 'application/json',
-    'Authorization':
-    'Bearer ${Logindata.usertoken}' + '_ie_' + '${Logindata.userid}'
-  };
-  final body = jsonEncode(<String, String>{
-    "sender_id": messengerid,
-    "receiver_id": receiverid,
-    "skip": skip
-  });
 
-  print(jsonEncode(body));
-  http.Response response = await http.post(
-      Uri.parse(baseurl + "messenger/getmessage"),
-      headers: headers,
-      body: body);
-  print("search : ${response.body}");
-  if (response.statusCode == 200) {
-    var decodeddata = jsonDecode(response.body);
-    tempmessages=[];
-    if(skip.toString() == "0"){
+  if(!currentusing){
+    currentusing = !currentusing;
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization':
+          'Bearer ${Logindata.usertoken}' + '_ie_' + '${Logindata.userid}'
+    };
+    final body = jsonEncode(<String, String>{
+      "sender_id": current_userid,
+      "receiver_id": receiverid,
+      "skip": "$skip"
+    });
+
+    print(jsonEncode(body));
+    http.Response response = await http.post(
+        Uri.parse(baseurl + "messenger/getmessage"),
+        headers: headers,
+        body: body);
+    print("search : ${response.body}");
+    if (response.statusCode == 200) {
       chatconversations = [];
-      data.messages=[];
-    }
+      var decodeddata = jsonDecode(response.body);
       for (int i = 0; i < decodeddata['data'].length; i++) {
-          if(decodeddata['data'].length.toString() == "10"){
-            showmore = true;
-          }else{
-            showmore = false;
-          }
-          String date;
-
-          try{
-            date = DateFormat("h:mma")
-                .format(DateTime.parse("${decodeddata['data'][i]['time']}"));
-      }catch(e){
-           date = "${decodeddata['data'][i]['time']}";
+        if (decodeddata['data'].length.toString() == "10") {
+          showmore = true;
+        } else {
+          showmore = false;
+        }
+        String date;
+        //     try{
+        //       date = DateFormat.yMd().add_jm().format(DateTime.parse("${decodeddata['data'][i]['time']}"));
+        // }catch(e){
+        date = "${decodeddata['data'][i]['time']}";
+        //  }
+        if (decodeddata['data'][i]['message'].toString() != "null") {
+          if(skipglobal==0 && decodeddata['data'][i]['message'].toString() != "null" && lastdate==null){
+            lastdate = date;
+            print("lastdate: "+lastdate);
           }
           chatconversations.add(message(
               id: decodeddata['data'][i]['_id']['\$oid'].toString(),
-              time:date,
+              time: date,
               senderid: decodeddata['data'][i]['sender_message_id'].toString(),
               receiverid:
-              decodeddata['data'][i]['receiver_message_id'].toString(),
+                  decodeddata['data'][i]['receiver_message_id'].toString(),
               messagecontent: decodeddata['data'][i]['message'].toString(),
               attachment:
-              decodeddata['data'][i]['attachment'].toString().split("<,>"),
+                  decodeddata['data'][i]['attachment'].toString().split("<,>"),
               sendername: decodeddata['data'][i]['sender_name'].toString(),
-              isdeleted: decodeddata['data'][i]['is_delete'] == 1 ? true:false,
+              isdeleted:
+                  decodeddata['data'][i]['is_delete'] == 1 ? true : false,
               readstatus: decodeddata['data'][i]['read_status'].toString()));
+        }
+      }
+      addmessages(chatconversations, context, false);
+      currentusing = !currentusing;
+      return true;
+    } else {
+      showmore = false;
+      currentusing = !currentusing;
+      return false;
     }
-
-    return true;
-  } else {
-    showmore = false;
-    if(skip.toString() == "0"){
-      chatconversations = [];
-      data.messages=[];
-    }
-    // var decodeddata = jsonDecode(response.body);
-    // Flushbar(
-    //   message: decodeddata['msg'],
-    //   icon: const Icon(
-    //     Icons.info_outline,
-    //     size: 20.0,
-    //     color: secondarycolor,
-    //   ),
-    //   duration: const Duration(seconds: 4),
-    //   leftBarIndicatorColor: secondarycolor,
-    // ).show(context);
-    return false;
   }
 }
+Widget datawidget;
 class data {
   static List<Row> messages;
 }
@@ -393,7 +385,7 @@ Future<bool> deletemessages(String messageid) async {
   };
   final body = jsonEncode(<String, String>
   {
-    "member_uid": messengerid,
+    "member_uid": current_userid,
     "object_id":"$messageid"
   }
   );

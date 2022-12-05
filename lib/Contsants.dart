@@ -21,9 +21,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 final bool live_server = true;
 final String baseurl= live_server ? "https://api.insightse.com/" :"https://testapi.insightse.com/";
 final String finalurl= live_server ? "https://api.insightse.com/" :"https://testapi.insightse.com/";
-final String websocket = live_server ?  "wss://insightse.com/iews/messenger?access_token=${Logindata.parentid.toString() == "null" ?"${Logindata.userid }":"${Logindata.parentid}"}":
-'wss://insightse.com/wss2/iemsg?access_token=${Logindata.parentid.toString() == "null" ?"${Logindata.userid }":"${Logindata.parentid}"}';
-int skip=0;
+int skipglobal=0;
 bool hide_search = false;
 String defaultimage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4M_mft2IDL4xKKW605PCEiQCf6QuZgQjFJFpT9QBjOw1Vb7D3tPxPIbkrnJTCvZ5MVOY&usqp=CAU";
 String current_userid ="${Logindata.parentid}" == "null" ?"${Logindata.userid }":"${Logindata.parentid}";
@@ -166,6 +164,7 @@ void initial() async {
   Logindata.fixedurl = fixedurl;
   Logindata.orgname = org_name;
   Logindata.branchname = logindata.getString('branch');
+  print("username is here: ${Logindata.username}");
   await GetLmsData(forthedate);
   await getunreadtitles();
 }

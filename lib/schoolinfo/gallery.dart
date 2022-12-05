@@ -42,6 +42,7 @@ class Events extends StatelessWidget {
   List<Widget> assets=[];
   List<Widget> children=[];
   Widget build(BuildContext context) {
+    children=[];
     for(int i=0;i<images.length;i++){
       assets.add(Image(image: NetworkImage(images[i])));
       heroProperties.add(ImageGalleryHeroProperties(tag: 'imageId'+'$i'),);

@@ -21,7 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'dart:async';
 import '../effects/effects.dart';
-
+import '../Switchaccounts/switchaccountsdata.dart';
 import 'dart:io';
 
 import '../Contsants.dart';
@@ -33,7 +33,7 @@ import 'tracking_text_input.dart';
 import 'package:http/http.dart' as http;
 import 'wave.dart';
 import '../newdashboardui.dart';
-
+bool addaccounttooltip = false;
 final forgotpasswordui = new ValueNotifier(false);
 final progress = new ValueNotifier(0);
 final forgotpassword = new ValueNotifier(false);
@@ -248,7 +248,7 @@ class _SignInState extends State<SignIn> {
                                                     onTextChanged: (String email) {
                                                       _email = email;
                                                     },
-                                                    label: "username",
+                                                    label: "Username",
                                                     onCaretMoved: (Offset caret) {
                                                       _teddyController.lookAt(caret);
                                                     },
@@ -274,7 +274,7 @@ class _SignInState extends State<SignIn> {
                                                         forgotpassword.value = false;
                                                       },
                                                       child: Text(
-                                                        "Login",
+                                                        "Go Back to Login Page",
                                                         style: TextStyle(
                                                             color: secondarycolor,
                                                             fontSize: 12),
@@ -324,7 +324,7 @@ class _SignInState extends State<SignIn> {
                                             onPressed1();
                                           }
                                         },
-                                        tooltip: "Sign in",
+                                        tooltip: forgotpassword.value ?  "Reset Password": addaccounttooltip ? "Add Account":"Login",
                                         child: progress.value == 0
                                             ? Icon(
                                                 Icons.arrow_forward_ios_rounded,
@@ -373,6 +373,7 @@ class _SignInState extends State<SignIn> {
         if (status) {
           Playsound("Success.mp3");
           Future.delayed(Duration(milliseconds: 500), () async {
+            addaccounttooltip = false;
             progress.value = 2;
             SmallHapticFeedback(true);
             await initial();
@@ -406,9 +407,8 @@ class _SignInState extends State<SignIn> {
     } else
       return false;
   }
-
-  Future<bool> _loginApi(
-      {@required String username, @required String password}) async {
+String classname;
+  Future<bool> _loginApi({@required String username, @required String password}) async {
     username = _email;
     password = _password;
 
@@ -442,7 +442,7 @@ class _SignInState extends State<SignIn> {
       String org_name = data["data"]["org_name"].toString();
       String profileimage = data["data"]["profile"].toString();
       String org_logo = data["data"]["org_logo"].toString();
-
+      classname =data["data"]["curr_class"].toString();
 
       String parentid = data["data"]["login_uid"].toString();
 
@@ -486,7 +486,11 @@ class _SignInState extends State<SignIn> {
       logindata.setStringList("sliders", sliders);
       logindata.setString("parent_id", parentid);
       logindata.setString('user_token', user_token);
+      current_userid ="${Logindata.parentid}" == "null" ?"${Logindata.userid }":"${Logindata.parentid}";
       _teddyController.play("success");
+      print(parentid);
+      print("signin page");
+      Addaccounts(username,password,profileimage,"$parentid" == "null" ?"Student":"Parent",true,full_name,classname,userid);
       return true;
     } else if (response.statusCode == 403) {
       final data = jsonDecode(response.body);
@@ -517,13 +521,13 @@ class _SignInState extends State<SignIn> {
   }
 }
 
-Future<bool> Logoutapi() async {
+Future<bool> Logoutapi(String userid) async {
   Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Authorization':
         'Bearer ${Logindata.usertoken}' + '_ie_' + '${Logindata.userid}'
   };
-  final body = jsonEncode(<String, String>{"device_token": await GetId(),"user_id":Logindata.userid});
+  final body = jsonEncode(<String, String>{"device_token": await GetId(),"user_id":userid});
   final response = await http.post(
     Uri.parse(finalurl + "users/log_out"),
     headers: headers,
@@ -535,3 +539,5 @@ Future<bool> Logoutapi() async {
     return false;
   }
 }
+//"{\"org_id\":\"61\",\"batch_id\":\"132\",\"stud_mid\":\"16093\",\"iduser\":\"42776\",\"search\":\"\"}"
+//"{\"org_id\":\"63\",\"batch_id\":\"110\",\"stud_mid\":\"17896\",\"iduser\":\"42776\",\"search\":\"\"}"
