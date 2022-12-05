@@ -17,6 +17,7 @@ import '../FeeManagement/feehome.dart';
 import '../profile/Profile.dart';
 import '../sign_in/sign_in.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:swipe_image_gallery/swipe_image_gallery.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Contsants.dart';
 import 'reportcard/report.dart';
@@ -78,8 +79,14 @@ class _HomePageState extends State<HomePage> {
     "assets/logo.jpeg",
   ];
   bool schoolname;
+  List<ImageGalleryHeroProperties> heroProperties=[];
+  List<Widget> assets=[];
   @override
   Widget build(BuildContext context) {
+    for(int i=0;i<sliders.length;i++) {
+      assets.add(Image(image: NetworkImage(sliders[i])));
+      heroProperties.add(ImageGalleryHeroProperties(tag: 'imageId'+'$i'),);
+    }
     return Scaffold(
       // appBar: PreferredSize(
       //   preferredSize: Size.fromHeight(60.0),
@@ -322,7 +329,13 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   onTap: () {
-                                    showdialog(context, sliders[i]);
+                                    SwipeImageGallery(
+                                      context: context,
+                                      children: assets,
+                                      // heroProperties: heroProperties,
+                                      initialIndex: i,
+                                    ).show();
+                                   // showdialog(context, sliders[i]);
                                   },
                                 ),
                               if (sliders.length == null)
