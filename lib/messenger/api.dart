@@ -9,7 +9,7 @@ import 'messagesui.dart';
 
 //String messengerid = current_userid;
 String attachmentsettings;
-
+String lastdate;
 class converstionlist {
   String fullname,
       department,
@@ -286,33 +286,31 @@ class message {
       });
 }
 List<message>chatconversations=[];
-List<message>tempmessages=[];
-
+bool currentusing = false;
 Future<bool> getmessages(receiverid,skip, context) async {
-  Map<String, String> headers = {
-    'Content-Type': 'application/json',
-    'Authorization':
-    'Bearer ${Logindata.usertoken}' + '_ie_' + '${Logindata.userid}'
-  };
-  final body = jsonEncode(<String, String>{
-    "sender_id": current_userid,
-    "receiver_id": receiverid,
-    "skip": skip
-  });
 
-  print(jsonEncode(body));
-  http.Response response = await http.post(
-      Uri.parse(baseurl + "messenger/getmessage"),
-      headers: headers,
-      body: body);
-  print("search : ${response.body}");
-  if (response.statusCode == 200) {
-    var decodeddata = jsonDecode(response.body);
-    tempmessages=[];
-    if(skip.toString() == "0"){
+  if(!currentusing){
+    currentusing = !currentusing;
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization':
+          'Bearer ${Logindata.usertoken}' + '_ie_' + '${Logindata.userid}'
+    };
+    final body = jsonEncode(<String, String>{
+      "sender_id": current_userid,
+      "receiver_id": receiverid,
+      "skip": "$skip"
+    });
+
+    print(jsonEncode(body));
+    http.Response response = await http.post(
+        Uri.parse(baseurl + "messenger/getmessage"),
+        headers: headers,
+        body: body);
+    print("search : ${response.body}");
+    if (response.statusCode == 200) {
       chatconversations = [];
-      data.messages=[];
-    }
+      var decodeddata = jsonDecode(response.body);
       for (int i = 0; i < decodeddata['data'].length; i++) {
         if (decodeddata['data'].length.toString() == "10") {
           showmore = true;
@@ -325,43 +323,37 @@ Future<bool> getmessages(receiverid,skip, context) async {
         // }catch(e){
         date = "${decodeddata['data'][i]['time']}";
         //  }
-        if(decodeddata['data'][i]['message'].toString()!="null"){
-        chatconversations.add(message(
-            id: decodeddata['data'][i]['_id']['\$oid'].toString(),
-            time: date,
-            senderid: decodeddata['data'][i]['sender_message_id'].toString(),
-            receiverid:
-                decodeddata['data'][i]['receiver_message_id'].toString(),
-            messagecontent: decodeddata['data'][i]['message'].toString(),
-            attachment:
-                decodeddata['data'][i]['attachment'].toString().split("<,>"),
-            sendername: decodeddata['data'][i]['sender_name'].toString(),
-            isdeleted: decodeddata['data'][i]['is_delete'] == 1 ? true : false,
-            readstatus: decodeddata['data'][i]['read_status'].toString()));
+        if (decodeddata['data'][i]['message'].toString() != "null") {
+          if(skipglobal==0 && decodeddata['data'][i]['message'].toString() != "null" && lastdate==null){
+            lastdate = date;
+            print("lastdate: "+lastdate);
+          }
+          chatconversations.add(message(
+              id: decodeddata['data'][i]['_id']['\$oid'].toString(),
+              time: date,
+              senderid: decodeddata['data'][i]['sender_message_id'].toString(),
+              receiverid:
+                  decodeddata['data'][i]['receiver_message_id'].toString(),
+              messagecontent: decodeddata['data'][i]['message'].toString(),
+              attachment:
+                  decodeddata['data'][i]['attachment'].toString().split("<,>"),
+              sendername: decodeddata['data'][i]['sender_name'].toString(),
+              isdeleted:
+                  decodeddata['data'][i]['is_delete'] == 1 ? true : false,
+              readstatus: decodeddata['data'][i]['read_status'].toString()));
+        }
       }
+      addmessages(chatconversations, context, false);
+      currentusing = !currentusing;
+      return true;
+    } else {
+      showmore = false;
+      currentusing = !currentusing;
+      return false;
     }
-
-    return true;
-  } else {
-    showmore = false;
-    if(skip.toString() == "0"){
-      chatconversations = [];
-      data.messages=[];
-    }
-    // var decodeddata = jsonDecode(response.body);
-    // Flushbar(
-    //   message: decodeddata['msg'],
-    //   icon: const Icon(
-    //     Icons.info_outline,
-    //     size: 20.0,
-    //     color: secondarycolor,
-    //   ),
-    //   duration: const Duration(seconds: 4),
-    //   leftBarIndicatorColor: secondarycolor,
-    // ).show(context);
-    return false;
   }
 }
+Widget datawidget;
 class data {
   static List<Row> messages;
 }

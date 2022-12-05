@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'api.dart';
 import 'package:intl/intl.dart';
 import '../ProgressHUD.dart';
+import 'messagesui.dart';
 import '../moduleapi.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 
@@ -65,7 +66,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: secondarycolor),
                     )),
-                centerTitle: true,
+                centerTitle: true,//wss://insightse.com/iews/messenger?access_token=104349
               ),
               body: SafeArea(
                   child:
@@ -180,9 +181,6 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                                   InkWell(
                                                     onTap: () async {
                                                       chatloading.value = true;
-                                                      socketstatus = await checksystem();
-                                                      chatloading.value = false;
-                                                      skip = 0;
                                                       try {
                                                         name =
                                                             searchresults[index]
@@ -229,6 +227,15 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                                       groupstatus = group;
                                                       is_bot = bot;
                                                       attachmentfile=null;
+                                                      lastdate = null;
+                                                      skipglobal = 0;
+                                                      data.messages =[];
+                                                      messageids=[];
+                                                      delete_mode.value = false;
+                                                      socketstatus = await checksystem();
+                                                      await getmessages(searchresults[index]
+                                                          .memberuid,skipglobal, context);
+                                                      chatloading.value = false;
                                                       Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
@@ -455,9 +462,6 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                               InkWell(
                                                 onTap: () async {
                                                   chatloading.value = true;
-                                                  socketstatus = await checksystem();
-                                                  chatloading.value = false;
-                                                  skip = 0;
                                                   try {
                                                     name =
                                                         conversations[index]
@@ -504,6 +508,15 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                                   groupstatus = group;
                                                   is_bot = bot;
                                                   attachmentfile=null;
+                                                  skipglobal = 0;
+                                                  data.messages =[];
+                                                  lastdate = null;
+                                                  messageids=[];
+                                                  delete_mode.value = false;
+                                                  socketstatus = await checksystem();
+                                                  await getmessages(conversations[index]
+                                                      .memberuid,skipglobal, context);
+                                                  chatloading.value = false;
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
