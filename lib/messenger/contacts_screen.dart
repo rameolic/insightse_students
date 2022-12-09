@@ -232,6 +232,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                                       data.messages =[];
                                                       messageids=[];
                                                       delete_mode.value = false;
+                                                      receivername = name;
                                                       socketstatus = await checksystem();
                                                       await getmessages(searchresults[index]
                                                           .memberuid,skipglobal, context);
@@ -513,6 +514,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                                   lastdate = null;
                                                   messageids=[];
                                                   delete_mode.value = false;
+                                                  receivername = name;
                                                   socketstatus = await checksystem();
                                                   await getmessages(conversations[index]
                                                       .memberuid,skipglobal, context);

@@ -120,14 +120,20 @@ class _ChatScreenState extends State<ChatScreen> {
               loading = false;
             });
           }
-        } else {
-          await sendnotification(
-              "[${Logindata.username}] "+decodeddata['sender_name'].toString() + " sent you a message.",
-              decodeddata['message']
-                  .toString()
-                  .length > 25
-                  ? decodeddata['message'].toString().substring(0, 25) + ".."
-                  : decodeddata['message'].toString());
+        }
+        else {
+          if(decodeddata['receiver_message_id'].toString().contains("group",0)){
+            await sendnotification(
+                "[${Logindata.fullname}] "+ decodeddata['receiver_name'],
+                "${decodeddata['sender_name']}: " +
+                    (decodeddata['message'].toString() != ""
+                        ? decodeddata['message'].toString() : " Attachment!"));
+          }else{
+        await sendnotification(
+        "[${Logindata.fullname}] " + decodeddata['sender_name'] + " messaged you",
+        decodeddata['message'].toString() != ""
+        ? decodeddata['message'].toString() : "Attachment!");
+        }
         }
       }, onDone: () async {
         setState(() {
@@ -357,11 +363,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                                       "sender":
                                                                       "$current_userid"
                                                                     };
-                                                                    await channel
-                                                                        .sink
-                                                                        .add(
-                                                                        jsonEncode(
-                                                                            refresh));
+                                                                    await channel.sink.add(jsonEncode(refresh));
                                                                     delete_mode.value = false;
                                                                     setState(() {
                                                                       loading = false;
@@ -665,7 +667,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                     "sender": current_userid,
                                                     "attachment": "",
                                                     "sender_name":
-                                                    Logindata.fullname
+                                                    Logindata.fullname,
+                                                    "receiver_name":widget.chatname,
                                                   };
                                                   print(body);
                                                   try {

@@ -1,35 +1,22 @@
 import 'package:flutter_icons/flutter_icons.dart';
 import 'moduleapi.dart';
 import 'careertests/careertestdashbord.dart';
-import 'dart:convert';
 import 'package:flushbar/flushbar.dart';
-import 'Switchaccounts/switchaccountsdata.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../circulars/circularhome.dart';
 import 'api/unreadtitlesapi.dart';
 import 'schoolinfo/schoolinfo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../pushnotification.dart';
-import 'dart:ui';
-import 'package:http/http.dart' as http;
 import '../FeeManagement/feehome.dart';
 import '../profile/Profile.dart';
-import '../sign_in/sign_in.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:swipe_image_gallery/swipe_image_gallery.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../Contsants.dart';
 import 'reportcard/report.dart';
-import 'package:intl/intl.dart';
-import 'messenger/contacts_screen.dart';
-import 'schoolinfo/schoolapis.dart';
 import 'package:badges/badges.dart';
+import 'package:swipe_image_gallery/swipe_image_gallery.dart';
 import 'online_classes/onlineUIupdated.dart';
 import 'Switchaccounts/SwitchaccountUI.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -44,7 +31,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     //slidersdata(usernamedata, password, deviceid);
   }
-
   // Future<void> slidersdata(
   //     String usernamedata, String password, String deviceid) async {
   //   Map<String, String> headers = {
@@ -282,7 +268,7 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       org_name,
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -304,54 +290,53 @@ class _HomePageState extends State<HomePage> {
               Container(
                 child: sliders.isEmpty
                     ? SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.30,
-                        child: Center(
-                            child: new Image(
-                          image: new AssetImage("assets/volume-colorful.gif"),
-                        )),
-                      )
+                  height: MediaQuery.of(context).size.height * 0.30,
+                  child: Center(
+                      child: new Image(
+                        image: new AssetImage("assets/volume-colorful.gif"),
+                      )),
+                )
                     : sliders.length > 0
-                        ? CarouselSlider(
-                            items: <Widget>[
-                              for (var i = 0; i < sliders.length; i++)
-                                GestureDetector(
-                                  child: Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 20.0, left: 20.0),
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(sliders[i]),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      // border:
-                                      //     Border.all(color: Theme.of(context).accentColor),
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    SwipeImageGallery(
-                                      context: context,
-                                      children: assets,
-                                      // heroProperties: heroProperties,
-                                      initialIndex: i,
-                                    ).show();
-                                   // showdialog(context, sliders[i]);
-                                  },
-                                ),
-                              if (sliders.length == null)
-                                CircularProgressIndicator()
-                            ],
-                            options: CarouselOptions(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.30,
-                                autoPlay: true,
-                                aspectRatio: 2.0,
-                                enlargeCenterPage: true,
-                                enlargeStrategy:
-                                    CenterPageEnlargeStrategy.height,
-                                scrollDirection: Axis.horizontal),
-                          )
-                        : SizedBox(),
+                    ? CarouselSlider(
+                  items: <Widget>[
+                    for (var i = 0; i < sliders.length; i++)
+                      GestureDetector(
+                        child: Container(
+                          margin: const EdgeInsets.only(
+                              top: 20.0, left: 20.0),
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(sliders[i]),
+                              fit: BoxFit.cover,
+                            ),
+                            // border:
+                            //     Border.all(color: Theme.of(context).accentColor),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                        onTap: () {
+                          SwipeImageGallery(
+                            context: context,
+                            children: assets,
+                            // heroProperties: heroProperties,
+                            initialIndex: i,
+                          ).show();
+                        },
+                      ),
+                    if (sliders.length == null)
+                      CircularProgressIndicator()
+                  ],
+                  options: CarouselOptions(
+                      height:
+                      MediaQuery.of(context).size.height * 0.30,
+                      autoPlay: true,
+                      aspectRatio: 2.0,
+                      enlargeCenterPage: true,
+                      enlargeStrategy:
+                      CenterPageEnlargeStrategy.height,
+                      scrollDirection: Axis.horizontal),
+                )
+                    : SizedBox(),
               ),
               // Padding(
               //   padding: const EdgeInsets.only(left: 15.0, top: 25, bottom: 10),
@@ -485,7 +470,7 @@ class _HomePageState extends State<HomePage> {
                           badgeColor: Colors.red[900],
                           toAnimate: true,
                           showBadge:
-                              newdata.reportcardcount == "0" ? false : true,
+                          newdata.reportcardcount == "0" ? false : true,
                           badgeContent: Text(
                             newdata.reportcardcount,
                             style: TextStyle(color: Colors.white),
@@ -738,9 +723,9 @@ class _HomePageState extends State<HomePage> {
             width: MediaQuery.of(context).size.width,
             child: SizedBox.expand(
                 child: Image.network(
-              item,
-              fit: BoxFit.fitWidth,
-            )),
+                  item,
+                  fit: BoxFit.fitWidth,
+                )),
             margin: EdgeInsets.only(bottom: 50, left: 12, right: 12),
             decoration: BoxDecoration(
               color: Colors.transparent,

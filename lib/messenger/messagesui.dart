@@ -3776,7 +3776,8 @@ class AttachmentPreveiw extends StatelessWidget {
                   "receiver": receiverid,
                   "sender": current_userid,
                   "attachment": link,
-                  "sender_name": Logindata.fullname
+                  "sender_name": Logindata.fullname,
+                  "receiver_name": receivername
                 };
                 print(body);
                 try {
@@ -3817,7 +3818,7 @@ class AttachmentPreveiw extends StatelessWidget {
   });
   }
 
-  uploadattachment(path) async {
+  uploadattachments(path) async {
     String link = await getattachmenturl(path);
     print("link : " + link);
     Map body = {
@@ -3826,7 +3827,8 @@ class AttachmentPreveiw extends StatelessWidget {
       "receiver": receiverid,
       "sender": current_userid,
       "attachment": link,
-      "sender_name": Logindata.fullname
+      "sender_name": Logindata.fullname,
+      "receiver_name":receivername,
     };
     print(body);
     try {

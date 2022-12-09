@@ -379,7 +379,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3.2;
+				MARKETING_VERSION = 2.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rubrixanalytics.insightsestudent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -519,7 +519,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3.2;
+				MARKETING_VERSION = 2.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rubrixanalytics.insightsestudent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -547,7 +547,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3.2;
+				MARKETING_VERSION = 2.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rubrixanalytics.insightsestudent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";

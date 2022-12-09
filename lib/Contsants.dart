@@ -17,7 +17,7 @@ import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-
+String receivername="";
 final bool live_server = true;
 final String baseurl= live_server ? "https://api.insightse.com/" :"https://testapi.insightse.com/";
 final String finalurl= live_server ? "https://api.insightse.com/" :"https://testapi.insightse.com/";
